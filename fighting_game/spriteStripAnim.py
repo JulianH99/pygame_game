@@ -1,4 +1,4 @@
-from spritesheet import spritesheet
+from fighting_game.spritesheet import spritesheet
 
 
 class SpriteStripAnim(object):
