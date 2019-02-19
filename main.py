@@ -1,18 +1,19 @@
 from pygame_functions import *
 
 
-screenSize(600,600)
+screenSize(600, 600)
 setBackgroundColour("pink")
-testSprite = makeSprite("assets\sprites\SpriteSheets\Maid\MaidStatic.png")#, 32)  # links.gif contains 32 separate frames of animation.
+testSprite = makeSprite("assets\\sprites\\SpriteSheets\\Maid\\MaidStatic.png")
+# 32)  links.gif contains 32 separate frames of animation.
 
-moveSprite(testSprite,300,300,True)
+moveSprite(testSprite, 300, 300, True)
 showSprite(testSprite)
 
 nextFrame = clock()
 frame = 0
 while True:
     if clock() > nextFrame:                         # We only animate our character every 80ms.
-        frame = (frame+1)%8                         # There are 8 frames of animation in each direction
+        frame = (frame+1) % 8                         # There are 8 frames of animation in each direction
         nextFrame += 80                             # so the modulus 8 allows it to loop
 
     if keyPressed("right"):
@@ -28,8 +29,8 @@ while True:
         changeSpriteImage(testSprite, 3*8+frame)
 
     else:
-        changeSpriteImage(testSprite, 1 * 8 + 5)  # the static facing front look
+        changeSpriteImage(testSprite, 13)  # the static facing front look
 
     tick(120)
 
-endWait()
+#  endWait()
