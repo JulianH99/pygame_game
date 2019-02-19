@@ -3,7 +3,7 @@ from pygame_functions import *
 
 screenSize(600,600)
 setBackgroundColour("pink")
-testSprite  = makeSprite("images/links.gif", 32)  # links.gif contains 32 separate frames of animation.
+testSprite = makeSprite("assets\sprites\SpriteSheets\Maid\MaidStatic.png")#, 32)  # links.gif contains 32 separate frames of animation.
 
 moveSprite(testSprite,300,300,True)
 showSprite(testSprite)

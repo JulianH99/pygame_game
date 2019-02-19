@@ -105,7 +105,7 @@ class newSprite(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         print(filename+"2")
-        img = loadImage(filename)
+        img = pygame.image.load(filename).convert_alpha()
         self.originalWidth = img.get_width() // frames
         self.originalHeight = img.get_height()
         frameSurf = pygame.Surface((self.originalWidth, self.originalHeight), pygame.SRCALPHA, 32)
@@ -277,8 +277,7 @@ class newLabel(pygame.sprite.Sprite):
 
 
 def loadImage(fileName, useColorKey=False):
-    image = pygame.image.load(fileName)
-    image = image.convert_alpha()
+    image = pygame.image.load(fileName).convert_alpha()
     # Return the image
     return image
 
