@@ -1,110 +1,35 @@
-"""
-Sample Python/Pygame Programs
-Simpson College Computer Science
-http://programarcadegames.com/
-http://simpson.edu/computer-science/
-
-Main module for platform scroller example.
-
-From:
-http://programarcadegames.com/python_examples/sprite_sheets/
-
-Explanation video: http://youtu.be/czBDKWJqOao
-
-Part of a series:
-http://programarcadegames.com/python_examples/f.php?file=move_with_walls_example.py
-http://programarcadegames.com/python_examples/f.php?file=maze_runner.py
-http://programarcadegames.com/python_examples/f.php?file=platform_jumper.py
-http://programarcadegames.com/python_examples/f.php?file=platform_scroller.py
-http://programarcadegames.com/python_examples/f.php?file=platform_moving.py
-http://programarcadegames.com/python_examples/sprite_sheets/
-
-Game art from Kenney.nl:
-http://opengameart.org/content/platformer-art-deluxe
-
-"""
-
-import pygame
-
-import fighting_game.constants as constants
-
-from fighting_game.player import Player
+from pygame_functions import *
 
 
-def main():
-    """ Main Program """
-    pygame.init()
+screenSize(600,600)
+setBackgroundColour("pink")
+testSprite = makeSprite("assets\sprites\SpriteSheets\Maid\MaidStatic.png")#, 32)  # links.gif contains 32 separate frames of animation.
 
-    # Set the height and width of the screen
-    size = [constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT]
-    screen = pygame.display.set_mode(size)
+moveSprite(testSprite,300,300,True)
+showSprite(testSprite)
 
-    pygame.display.set_caption("Test Game")
+nextFrame = clock()
+frame = 0
+while True:
+    if clock() > nextFrame:                         # We only animate our character every 80ms.
+        frame = (frame+1)%8                         # There are 8 frames of animation in each direction
+        nextFrame += 80                             # so the modulus 8 allows it to loop
 
-    # Create the player
-    player = Player()
+    if keyPressed("right"):
+        changeSpriteImage(testSprite, 0*8+frame)    # 0*8 because right animations are the 0th set in the sprite sheet
 
-    active_sprite_list = pygame.sprite.Group()
+    elif keyPressed("down"):
+        changeSpriteImage(testSprite, 1*8+frame)    # down facing animations are the 1st set
 
-    player.rect.x = 340
-    player.rect.y = constants.SCREEN_HEIGHT - player.rect.height
-    active_sprite_list.add(player)
+    elif keyPressed("left"):
+        changeSpriteImage(testSprite, 2*8+frame)    # and so on
 
-    # Loop until the user clicks the close button.
-    done = False
+    elif keyPressed("up"):
+        changeSpriteImage(testSprite, 3*8+frame)
 
-    # Used to manage how fast the screen updates
-    clock = pygame.time.Clock()
+    else:
+        changeSpriteImage(testSprite, 1 * 8 + 5)  # the static facing front look
 
-    # -------- Main Program Loop -----------
-    while not done:
-        for event in pygame.event.get():  # User did something
-            if event.type == pygame.QUIT:  # If user clicked close
-                done = True  # Flag that we are done so we exit this loop
+    tick(120)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player.go_left()
-                if event.key == pygame.K_RIGHT:
-                    player.go_right()
-                if event.key == pygame.K_UP:
-                    player.jump()
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT and player.change_x < 0:
-                    player.stop()
-                if event.key == pygame.K_RIGHT and player.change_x > 0:
-                    player.stop()
-
-        # Update the player.
-        active_sprite_list.update()
-
-        # If the player gets near the right side, shift the world left (-x)
-        if player.rect.right >= 500:
-            diff = player.rect.right - 500
-            player.rect.right = 500
-
-        # If the player gets near the left side, shift the world right (+x)
-        if player.rect.left <= 120:
-            diff = 120 - player.rect.left
-            player.rect.left = 120
-
-
-        # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
-
-        # Limit to 60 frames per second
-        clock.tick(60)
-
-
-        # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
-
-
-        active_sprite_list.draw(screen)
-
-    # Be IDLE friendly. If you forget this line, the program will 'hang'
-    # on exit. pygame.quit()
-
-
-if __name__ == "__main__":
-    main()
+endWait()
