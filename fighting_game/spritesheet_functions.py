@@ -3,7 +3,7 @@ This module is used to pull individual sprites from sprite sheets.
 """
 import pygame
 
-import constants
+import fighting_game.constants as constants
 
 
 class SpriteSheet(object):

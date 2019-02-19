@@ -95,8 +95,12 @@ def main():
         # Limit to 60 frames per second
         clock.tick(60)
 
+
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
+
+
+        active_sprite_list.draw(screen)
 
     # Be IDLE friendly. If you forget this line, the program will 'hang'
     # on exit. pygame.quit()

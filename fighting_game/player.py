@@ -3,10 +3,8 @@ This module is used to hold the Player class. The Player represents the user-
 controlled sprite on the screen.
 """
 import pygame
-
-import constants
-
-from spritesheet_functions import SpriteSheet
+import fighting_game.constants as constants
+from fighting_game.spritesheet_functions import SpriteSheet
 
 
 class Player(pygame.sprite.Sprite):
@@ -83,6 +81,20 @@ class Player(pygame.sprite.Sprite):
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
 
+    def go_left(self):
+        """ Called when the user hits the left arrow. """
+        self.change_x = -6
+        self.direction = "L"
+
+    def go_right(self):
+        """ Called when the user hits the right arrow. """
+        self.change_x = 6
+        self.direction = "R"
+
+    def stop(self):
+        """ Called when the user lets off the keyboard. """
+        self.change_x = 0
+
     def update(self):
         """ Move the player. """
         # Gravity
@@ -90,14 +102,13 @@ class Player(pygame.sprite.Sprite):
 
         # Move left/right
         self.rect.x += self.change_x
-        pos = self.rect.x #+ self.level.world_shift
+        pos = self.rect.x  # + self.level.world_shift
         if self.direction == "R":
             frame = (pos // 30) % len(self.walking_frames_r)
             self.image = self.walking_frames_r[frame]
         else:
             frame = (pos // 30) % len(self.walking_frames_l)
             self.image = self.walking_frames_l[frame]
-
 
         """
         # See if we hit anything
@@ -139,32 +150,21 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y >= constants.SCREEN_HEIGHT - self.rect.height and self.change_y >= 0:
             self.change_y = 0
             self.rect.y = constants.SCREEN_HEIGHT - self.rect.height
-    """
-    def jump(self):
-        Called when user hits 'jump' button. 
 
-        # move down a bit and see if there is a platform below us.
-        # Move down 2 pixels because it doesn't work well if we only move down 1
-        # when working with a platform moving down.
-        self.rect.y += 2
-        platform_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
-        self.rect.y -= 2
 
-        # If it is ok to jump, set our speed upwards
-        if len(platform_hit_list) > 0 or self.rect.bottom >= constants.SCREEN_HEIGHT:
-            self.change_y = -10
-    """
-    # Player-controlled movement:
-    def go_left(self):
-        """ Called when the user hits the left arrow. """
-        self.change_x = -6
-        self.direction = "L"
+"""  def jump(self):
+     # Called when user hits 'jump' button. 
 
-    def go_right(self):
-        """ Called when the user hits the right arrow. """
-        self.change_x = 6
-        self.direction = "R"
+     # move down a bit and see if there is a platform below us.
+     # Move down 2 pixels because it doesn't work well if we only move down 1
+     # when working with a platform moving down.
+     self.rect.y += 2
+     platform_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+     self.rect.y -= 2
 
-    def stop(self):
-        """ Called when the user lets off the keyboard. """
-        self.change_x = 0
+     # If it is ok to jump, set our speed upwards
+     if len(platform_hit_list) > 0 or self.rect.bottom >= constants.SCREEN_HEIGHT:
+         self.change_y = -10 """
+
+        # Player-controlled movement:
+
