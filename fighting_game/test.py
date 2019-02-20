@@ -50,7 +50,8 @@ class spritesheet:
     def draw(self, surface, cellIndex, x, y, handle=0):
         surface.blit(self.sheet, (x + self.handle[handle][0], y + self.handle[handle][1]), self.cells[cellIndex])
 
-direction  = "assets\sprites\SpriteSheets\Maid\MaidStatic.png"
+
+direction = "..\\assets\\sprites\\SpriteSheets\\Maid\\MaidStatic.png"
 s = spritesheet(direction, 8, 1)
 
 CENTER_HANDLE = 4
