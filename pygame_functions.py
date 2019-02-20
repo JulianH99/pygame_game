@@ -134,7 +134,6 @@ class newSprite(pygame.sprite.Sprite):
             self.rect.topleft = [xpos, ypos]
 
     def changeImage(self, index):
-        print(self.images)
         self.currentImage = index
         if self.angle == 0 and self.scale == 1:
             self.image = self.images[index]
