@@ -22,7 +22,14 @@ character_director.construct()
 
 maid = character_builder.character
 
+character_builder.change_class(Maid)
+character_director.set_builder(character_builder)
+
+another_maid = character_builder.character
+
+
 maid.set_x_y((100, GROUND_AREA_Y))
+another_maid.set_x_y((400, GROUND_AREA_Y))
 
 print(maid)
 
@@ -36,6 +43,7 @@ done = False
 sprites = pygame.sprite.Group()
 
 sprites.add(maid)
+sprites.add(another_maid)
 
 
 clock = pygame.time.Clock()

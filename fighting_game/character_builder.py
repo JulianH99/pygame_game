@@ -10,13 +10,21 @@ class CharacterDirector:
         """
         Initializes the CharacterDirector to use a specific CharacterBuilder
         :param character_builder: The character builder to use in construction process
-        :type character_builder: CharacterBuilder
+        :type character_builder: AbstractCharacterBuilder
         """
         self.character_builder = character_builder
 
     def construct(self):
         self.character_builder.build_right_animation()
         self.character_builder.build_left_animation()
+
+    def set_builder(self, character_builder):
+        """
+        Changes the base builder of the director
+        :param character_builder: builder to be used
+        :type character_builder: AbstractCharacterBuilder
+        """
+        self.character_builder = character_builder
 
 
 class AbstractCharacterBuilder(abc.ABC):
@@ -28,6 +36,10 @@ class AbstractCharacterBuilder(abc.ABC):
     @property
     def character(self):
         return self._character
+
+    def change_class(self, ch_class):
+        self.ch_class = ch_class
+        self._character = ch_class()
 
     @abc.abstractmethod
     def build_right_animation(self):
