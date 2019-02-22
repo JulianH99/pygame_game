@@ -81,6 +81,17 @@ pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\Mai
 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (7).png"),
 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (8).png")]
 
+staticAnimation = [
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (1).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (2).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (3).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (4).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (5).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (6).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (7).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidStaticAnimation\MaidStatic (8).png")
+]
+
 dieAnimation=[
 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (1).png"),
 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (2).png"),

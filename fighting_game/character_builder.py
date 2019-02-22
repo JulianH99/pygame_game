@@ -24,6 +24,7 @@ class CharacterDirector:
         self.character_builder.build_pro_fist_animation()
         self.character_builder.build_large_attack_animation()
         self.character_builder.build_pro_large_attack_animation()
+        self.character_builder.build_static_animation()
 
         "The method die is giving problems"
         #self.character_builder.build_die_animation()
@@ -129,6 +130,15 @@ class AbstractCharacterBuilder(abc.ABC):
         :return:
         """
         pass
+
+    @abc.abstractmethod
+    def build_static_animation(self):
+        """
+        Builds the static animation for the character
+        :return:
+        """
+        pass
+
 
 class CharacterBuilder(AbstractCharacterBuilder):
 
@@ -282,7 +292,6 @@ class CharacterBuilder(AbstractCharacterBuilder):
         self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, pro_defense_animation)
         pass
 
-
     " FALTA AGREGAR DIE DENTRO DE LAS DINAMYCS"
 
     def build_die_animation(self):
@@ -299,4 +308,20 @@ class CharacterBuilder(AbstractCharacterBuilder):
         die_animation.load_images()
 
         self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, die_animation)
+        pass
+
+    def build_static_animation(self):
+        base_name = self._character.name + 'Static'
+
+        static_animation = SpriteSheet(
+            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
+            frames=8
+        )
+
+        static_animation.base_file_name = base_name
+        static_animation.key_name = self._character.name.lower() + '_static'
+
+        static_animation.load_images()
+
+        #self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, static_animation)
         pass
