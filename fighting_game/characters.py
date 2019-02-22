@@ -1,19 +1,18 @@
 import pygame
 import os
 from abc import abstractmethod
-import time
 from typing import Dict
 from fighting_game.helpers.colors import *
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
-from fighting_game.sprite_sheet import SpriteSheet
+from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH
-
-screen = pygame.display.set_mode([800, 400])
-background = pygame.image.load('./assets/sprites/Backgrounds/BackgroundFairyTail.png').convert()
 
 
 class Character(pygame.sprite.Sprite):
+    """
+    Represents the basic character that the user will see in screen
+    """
     width = 64
     height = 64
 
@@ -69,22 +68,42 @@ class Character(pygame.sprite.Sprite):
             raise KeyError("{} is already defined".format(key))
         self.sprite_sheets[key] = sprite_sheet
 
-    def handle_keydown(self):
-        key = pygame.key.get_pressed()
+    # def handle_keydown(self):
+    #     key = pygame.key.get_pressed()
+    #
+    #     if key[pygame.K_LEFT] and self.rect.centerx >= 0:
+    #         self.rect.centerx -= self.speed
+    #         self.playing_animation = self.sprite_sheets[MovingAnimation.LEFT.value]
+    #
+    #     elif key[pygame.K_RIGHT] and self.rect.centerx <= SCREEN_WIDTH:
+    #         self.rect.centerx += self.speed
+    #         self.playing_animation = self.sprite_sheets[MovingAnimation.RIGHT.value]
+    #
+    #     elif key[pygame.K_DOWN]:
+    #         self.playing_animation = self.sprite_sheets[FightingAnimation.DEFENSE.value]
+    #
+    #     if key[pygame.K_UP]:
+    #         self.states['jump'] = True
 
-        if key[pygame.K_LEFT] and self.rect.centerx >= 0:
-            self.rect.centerx -= self.speed
-            self.playing_animation = self.sprite_sheets['left']
+    def trigger_animation(self, animation):
+        if isinstance(animation, MovingAnimation) or \
+                isinstance(animation, FightingAnimation) or \
+                isinstance(animation, ProFightingAnimation):
+            self.playing_animation = self.sprite_sheets[animation.value]
 
-        elif key[pygame.K_RIGHT] and self.rect.centerx <= SCREEN_WIDTH:
-            self.rect.centerx += self.speed
-            self.playing_animation = self.sprite_sheets['right']
+            if animation == MovingAnimation.LEFT:
+                self.trigger_left()
 
-        elif key[pygame.K_DOWN]:
-            self.playing_animation = self.sprite_sheets['defense']
+            if animation == MovingAnimation.RIGHT:
+                self.trigger_right()
+        else:
+            raise ValueError('animation should be a valid Animation type')
 
-        if key[pygame.K_UP]:
-            self.states['jump'] = True
+    def trigger_left(self):
+        self.rect.centerx -= self.speed
+
+    def trigger_right(self):
+        self.rect.centerx += self.speed
 
     def update(self, *args):
         if self.playing_animation:
@@ -94,25 +113,6 @@ class Character(pygame.sprite.Sprite):
             else:
                 self.current_index = 0
                 self.playing_animation = None
-
-
-
-
-        # if self.jumping:
-        #     if self.force > 0:
-        #         F = (0.4 * self.mass * (self.force*self.force))
-        #     else:
-        #         F = -(0.4 * self.mass * (self.force*self.force))
-        #
-        #     self.rect.centery = self.rect.centery - F
-        #
-        #     self.force -= 1
-        #
-        # if self.rect.centery >= 360:
-        #     self.rect.centery = 360
-        #     self.jumping = False
-        #     self.force = 8
-        pass
 
 
 class Maid(Character):

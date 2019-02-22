@@ -3,8 +3,11 @@ import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid
-from fighting_game.sprite_sheet import SpriteSheet
-from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT
+from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation
+from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
+import copy
+
+print(MovingAnimation.RIGHT)
 
 pygame.init()
 
@@ -12,7 +15,7 @@ win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("TEST GAME")
 
-maid = Maid(100, 100)
+maid = Maid(100, GROUND_AREA_Y)
 
 right_animation = SpriteSheet(
     base_sprite_path=os.path.join(maid.get_sprite_path(), 'MaidRight'), frames=8)
@@ -43,11 +46,13 @@ defense_animation.key_name = 'maid_defense'
 
 defense_animation.load_images()
 
-maid.add_sprite_sheet("right", right_animation)
-maid.add_sprite_sheet("left", left_animation)
-maid.add_sprite_sheet("defense", defense_animation)
+maid.add_sprite_sheet(MovingAnimation.RIGHT.value, right_animation)
+maid.add_sprite_sheet(MovingAnimation.LEFT.value, left_animation)
+maid.add_sprite_sheet(FightingAnimation.DEFENSE.value, defense_animation)
 
 background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+
+scaled_background = Image.scale_to_window(background)
 
 done = False
 
@@ -66,10 +71,19 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    win.blit(background, (0, 0))
+    key_pressed = pygame.key.get_pressed()
 
-    for sprite in sprites.sprites():
-        sprite.handle_keydown()
+    if key_pressed[pygame.K_LEFT]:
+        maid.trigger_animation(MovingAnimation.LEFT)
+    elif key_pressed[pygame.K_RIGHT]:
+        maid.trigger_animation(MovingAnimation.RIGHT)
+    elif key_pressed[pygame.K_DOWN]:
+        maid.trigger_animation(FightingAnimation.DEFENSE)
+
+    win.blit(scaled_background, (0, 0))
+
+    # for sprite in sprites.sprites():
+    #     sprite.handle_keydown()
 
     sprites.update()
 
