@@ -118,4 +118,17 @@ class Maid(Character):
         return Image.load(os.path.join(self.path, "MaidBasicModel.png"))
 
     def get_sprite_path(self):
-        return Path.path_to("sprite_sheets", "RealMaid")
+        return Path.path_to("sprite_sheets", "Maid")
+
+
+class Bowsette(Character):
+
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Bowsette'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "BowsetteBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Bowsette")
