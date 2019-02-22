@@ -46,9 +46,6 @@ largeAttackAnimation = [
     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (8).png"),
     ]
 
-backGround = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
-basicSprite = maid.get_base_image()
-
 clock = pygame.time.Clock()
 
 x = 100

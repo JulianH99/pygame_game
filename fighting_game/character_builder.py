@@ -17,6 +17,9 @@ class CharacterDirector:
     def construct(self):
         self.character_builder.build_right_animation()
         self.character_builder.build_left_animation()
+        self.character_builder.build_defense_animation()
+        self.character_builder.build_fist_animation()
+        self.character_builder.build_large_attack_animation()
 
     def set_builder(self, character_builder):
         """
@@ -131,11 +134,50 @@ class CharacterBuilder(AbstractCharacterBuilder):
         pass
 
     def build_fist_animation(self):
+        base_name = self._character.name + 'Fist'
+
+        fist_animation = SpriteSheet(
+            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
+            frames=8
+        )
+
+        fist_animation.base_file_name = base_name
+        fist_animation.key_name = self._character.name.lower() + '_fist'
+
+        fist_animation.load_images()
+
+        self._character.add_sprite_sheet(FightingAnimation.FIST.value, fist_animation)
         pass
 
     def build_large_attack_animation(self):
+        base_name = self._character.name + 'LargeAttack'
+
+        largeAttack_animation = SpriteSheet(
+            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
+            frames=8
+        )
+
+        largeAttack_animation.base_file_name = base_name
+        largeAttack_animation.key_name = self._character.name.lower() + '_largeAttack'
+
+        largeAttack_animation.load_images()
+
+        self._character.add_sprite_sheet(FightingAnimation.LARGE_ATTACK.value, largeAttack_animation)
         pass
 
     def build_defense_animation(self):
+        base_name = self._character.name + 'Defense'
+
+        defense_animation = SpriteSheet(
+            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
+            frames=8
+        )
+
+        defense_animation.base_file_name = base_name
+        defense_animation.key_name = self._character.name.lower() + '_defense'
+
+        defense_animation.load_images()
+
+        self._character.add_sprite_sheet(FightingAnimation.DEFENSE.value, defense_animation)
         pass
 

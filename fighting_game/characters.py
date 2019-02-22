@@ -88,6 +88,7 @@ class Character(pygame.sprite.Sprite):
 
             if animation == MovingAnimation.RIGHT:
                 self.trigger_right()
+
         else:
             raise ValueError('animation should be a valid Animation type')
 
