@@ -7,6 +7,7 @@ from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH
+from typing import Tuple
 
 
 class Character(pygame.sprite.Sprite):
@@ -19,6 +20,7 @@ class Character(pygame.sprite.Sprite):
     def __init__(self, x=0, y=0):
         super().__init__()
 
+        self.name = None
         # Path to sprite images
         self.path = self.get_sprite_path()
 
@@ -60,30 +62,20 @@ class Character(pygame.sprite.Sprite):
     def get_sprite_path(self):
         pass
 
-    def draw(self):
-        pygame.draw.rect(self.image, WHITE, [100, 100, self.width, self.height])
+    def set_x_y(self, x_y):
+        """
+        Sets the position of the character in screen
+        :param x_y: Tuple with two integers, representing the position in two axes
+        :type x_y: Tuple[int, int]
+        """
+
+        self.rect.centery = x_y[1]
+        self.rect.centerx = x_y[0]
 
     def add_sprite_sheet(self, key: str, sprite_sheet: SpriteSheet):
         if key in self.sprite_sheets:
             raise KeyError("{} is already defined".format(key))
         self.sprite_sheets[key] = sprite_sheet
-
-    # def handle_keydown(self):
-    #     key = pygame.key.get_pressed()
-    #
-    #     if key[pygame.K_LEFT] and self.rect.centerx >= 0:
-    #         self.rect.centerx -= self.speed
-    #         self.playing_animation = self.sprite_sheets[MovingAnimation.LEFT.value]
-    #
-    #     elif key[pygame.K_RIGHT] and self.rect.centerx <= SCREEN_WIDTH:
-    #         self.rect.centerx += self.speed
-    #         self.playing_animation = self.sprite_sheets[MovingAnimation.RIGHT.value]
-    #
-    #     elif key[pygame.K_DOWN]:
-    #         self.playing_animation = self.sprite_sheets[FightingAnimation.DEFENSE.value]
-    #
-    #     if key[pygame.K_UP]:
-    #         self.states['jump'] = True
 
     def trigger_animation(self, animation):
         if isinstance(animation, MovingAnimation) or \
@@ -117,8 +109,9 @@ class Character(pygame.sprite.Sprite):
 
 class Maid(Character):
 
-    def __init__(self, x, y):
+    def __init__(self, x=0, y=0):
         super().__init__(x, y)
+        self.name = 'Maid'
 
     def get_base_image(self):
         return Image.load(os.path.join(self.path, "MaidBasicModel.png"))
