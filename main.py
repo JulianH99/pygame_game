@@ -1,45 +1,83 @@
-import sys, pygame
-from pygame.locals import *
-from pygame_functions import *
+import pygame
+import os
+from fighting_game.helpers.image import Image
+from fighting_game.helpers.path import Path
+from fighting_game.characters import Maid
+from fighting_game.sprite_sheet import SpriteSheet
+from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT
 
-screenSize(800, 400)
-setBackgroundImage("assets\\sprites\\Backgrounds\\BackgroundLeafVillage.png")
-testSprite = makeSprite("assets\\sprites\\SpriteSheets\\Maid\\Maid.png", 32)
-# 32)  links.gif contains 32 separate frames of animation.
+pygame.init()
 
-moveSprite(testSprite, 300, 300, True)
-showSprite(testSprite)
+win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-nextFrame = clock()
-frame = 0
+pygame.display.set_caption("TEST GAME")
 
-xpos = 200
-ypos= 200
-xspeed = 0
-go = 0
+maid = Maid(100, 100)
 
-while True:
-    if clock() > nextFrame:                         # We only animate our character every 80ms.
-        frame = (frame+1) % 8                         # There are 8 frames of animation in each direction
-        nextFrame += 200                             # so the modulus 8 allows it to loop
-        changeSpriteImage(testSprite, 1)
-    if keyPressed("z"):
-        changeSpriteImage(testSprite, 1 * 8 + frame)
-    if keyPressed("right"):
-        changeSpriteImage(testSprite, 2 * 8 + frame)  # 0*8 because right animations are the 0th set in the sprite sheet
-        """go = 2
-        xpos += xspeed
-        moveSprite(testSprite, xpos, 0)
-        xspeed += 1 - go"""
-    if keyPressed("down"):
-        changeSpriteImage(testSprite, 3 * 8 + frame)
-    #else:
-        #changeSpriteImage(testSprite, 0*8 + frame)
-    tick(120)
+right_animation = SpriteSheet(
+    base_sprite_path=os.path.join(maid.get_sprite_path(), 'MaidRight'), frames=8)
 
-    for eventos in pygame.event.get():
-        if eventos.type == QUIT:
-            sys.exit(0)
+right_animation.base_file_name = 'MaidRunRight'
+right_animation.key_name = 'maid_right'
+
+right_animation.load_images()
+
+left_animation = SpriteSheet(
+    base_sprite_path=os.path.join(maid.get_sprite_path(), 'MaidLeft'),
+    frames=8
+)
+
+left_animation.base_file_name = 'MaidRunLeft'
+left_animation.key_name = 'maid_left'
+
+left_animation.load_images()
 
 
-#  endWait()
+defense_animation = SpriteSheet(
+    base_sprite_path=os.path.join(maid.get_sprite_path(), 'MaidDefense'),
+    frames=8
+)
+
+defense_animation.base_file_name = 'MaidDefense'
+defense_animation.key_name = 'maid_defense'
+
+defense_animation.load_images()
+
+maid.add_sprite_sheet("right", right_animation)
+maid.add_sprite_sheet("left", left_animation)
+maid.add_sprite_sheet("defense", defense_animation)
+
+background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+
+done = False
+
+
+sprites = pygame.sprite.Group()
+
+sprites.add(maid)
+
+
+clock = pygame.time.Clock()
+
+
+while not done:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+
+    win.blit(background, (0, 0))
+
+    for sprite in sprites.sprites():
+        sprite.handle_keydown()
+
+    sprites.update()
+
+    sprites.draw(win)
+
+    pygame.display.flip()
+
+    clock.tick(27)
+
+
+pygame.quit()

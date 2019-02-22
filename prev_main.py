@@ -1,26 +1,24 @@
 import pygame
-pygame.init()
-
-win = pygame.display.set_mode((800,400))
-
-pygame.display.set_caption("TEST GAME")
+import os
+from fighting_game.helpers.image import Image
+from fighting_game.helpers.path import Path
 
 rightAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (1).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (2).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (3).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (4).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (5).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (6).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (7).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (8).png")]
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (2).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (3).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (4).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (5).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (6).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (7).png"),
+                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (8).png")]
 leftAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (1).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (2).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (3).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (4).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (5).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (6).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (7).png"),
-                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (8).png"),]
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (2).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (3).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (4).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (5).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (6).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (7).png"),
+                 pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (8).png"), ]
 defenseAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (1).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (2).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (3).png"),
@@ -37,25 +35,26 @@ fistAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFis
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (6).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (7).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (8).png")]
-largeAttackAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (1).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (2).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (3).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (4).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (5).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (6).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (7).png"),
-                        pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (8).png"),
-                        ]
+largeAttackAnimation = [
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (1).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (2).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (3).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (4).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (5).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (6).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (7).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (8).png"),
+    ]
 
-backGround = pygame.image.load('assets\sprites\Backgrounds\BackgroundFairyTail.png')
-basicSprite = pygame.image.load('assets\sprites\SpriteSheets\Maid\MaidBasicModel.png')
+backGround = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+basicSprite = maid.get_base_image()
 
 clock = pygame.time.Clock()
 
 x = 100
 y = 100
 width = 48
-height =48
+height = 48
 vel = 5
 isJump = False
 jumpCount = 5
@@ -67,12 +66,13 @@ largeAttack = False
 
 walkCount = 0
 
+
 def reDrawGameWindow():
     global walkCount
-    win.blit(backGround, (0,0))
+    win.blit(backGround, (0, 0))
 
-    if walkCount +1>=8:
-        walkCount =0
+    if walkCount + 1 >= 8:
+        walkCount = 0
     if attack:
         win.blit(fistAnimation[walkCount // 1], (x, y))
         walkCount += 1
@@ -83,18 +83,18 @@ def reDrawGameWindow():
         win.blit(defenseAnimation[walkCount // 1], (x, y))
         walkCount += 1
     if right:
-        win.blit(rightAnimation[walkCount//1], (x,y))
-        walkCount+=1
+        win.blit(rightAnimation[walkCount // 1], (x, y))
+        walkCount += 1
     if left:
-        win.blit(leftAnimation[walkCount//1], (x,y))
-        walkCount+=1
+        win.blit(leftAnimation[walkCount // 1], (x, y))
+        walkCount += 1
     else:
-        win.blit(basicSprite, (x,y))
+        win.blit(basicSprite, (x, y))
 
     pygame.display.update()
 
 
-#mainloop
+# mainloop
 run = False
 while not run:
     clock.tick(27)
@@ -106,7 +106,7 @@ while not run:
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_LEFT] and x > vel:
-        x -=vel
+        x -= vel
         left = True
         right = False
         defense = False
@@ -150,12 +150,12 @@ while not run:
             left = False
             right = False
     else:
-        if jumpCount >=-5:
-            neg =1
-            if jumpCount <0:
-                neg =-1
-            y -= (jumpCount ** 2) *0.5 * neg
-            jumpCount =-1
+        if jumpCount >= -5:
+            neg = 1
+            if jumpCount < 0:
+                neg = -1
+            y -= (jumpCount ** 2) * 0.5 * neg
+            jumpCount = -1
         else:
             isJump = False
             jumpCount = 10
