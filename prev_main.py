@@ -11,6 +11,7 @@ rightAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRi
                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (6).png"),
                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (7).png"),
                   pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidRight\MaidRunRight (8).png")]
+
 leftAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (1).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (2).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (3).png"),
@@ -19,6 +20,7 @@ leftAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLef
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (6).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (7).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLeft\MaidRunLeft (8).png"), ]
+
 defenseAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (1).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (2).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (3).png"),
@@ -27,6 +29,7 @@ defenseAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\Maid
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (6).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (7).png"),
                     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDefense\MaidDefense (8).png")]
+
 fistAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (1).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (2).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (3).png"),
@@ -35,6 +38,7 @@ fistAnimation = [pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFis
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (6).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (7).png"),
                  pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidFist\MaidFist (8).png")]
+
 largeAttackAnimation = [
     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (1).png"),
     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (2).png"),
@@ -45,6 +49,45 @@ largeAttackAnimation = [
     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (7).png"),
     pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidLargeAttack\MaidLargeAttack (8).png"),
     ]
+
+proDefenseAnimation = [
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (1).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (2).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (3).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (4).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (5).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (6).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (7).png"),
+    pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProDefense\MaidProDefense (8).png"),
+    ]
+
+proLargeAttackAnimation = [
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (1).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (2).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (3).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (4).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (5).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (6).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (7).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProLargeAttack\MaidProLargeAttack (8).png")]
+
+proFistAnimation = [
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (1).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (2).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (3).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (4).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (5).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (6).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (7).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidProFistAnimation\MaidProFist (8).png")]
+
+dieAnimation=[
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (1).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (2).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (3).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (4).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (5).png"),
+pygame.image.load("assets\sprites\SpriteSheets\RealMaid\MaidDie\MaidDie (6).png")]
 
 clock = pygame.time.Clock()
 

@@ -3,7 +3,7 @@ import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid
-from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation
+from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 
@@ -47,9 +47,6 @@ sprites.add(another_maid)
 
 
 clock = pygame.time.Clock()
-
-def 
-
 
 while not done:
 
