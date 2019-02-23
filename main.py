@@ -3,7 +3,7 @@ import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid
-from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation
+from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 
@@ -50,7 +50,6 @@ sprites.add(another_maid)
 
 clock = pygame.time.Clock()
 
-
 while not done:
 
     for event in pygame.event.get():
@@ -65,6 +64,10 @@ while not done:
         maid.trigger_animation(MovingAnimation.RIGHT)
     elif key_pressed[pygame.K_DOWN]:
         maid.trigger_animation(FightingAnimation.DEFENSE)
+    elif key_pressed[pygame.K_z]:
+        maid.trigger_animation(FightingAnimation.FIST)
+    elif key_pressed[pygame.K_x]:
+        maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
 
     if another_maid.rect.centerx > maid.rect.centerx + 200:
         another_maid.trigger_animation(MovingAnimation.LEFT)
@@ -74,8 +77,6 @@ while not done:
 
     win.blit(scaled_background, (0, 0))
 
-    # for sprite in sprites.sprites():
-    #     sprite.handle_keydown()
 
     maid.collision_with_char(another_maid)
 

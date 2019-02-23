@@ -33,7 +33,7 @@ class ProFightingAnimation(Enum):
     """
     PRO_FIST = 'pro_fist'
     PRO_DEFENSE = 'pro_defense'
-    pro_LARGE_ATTACK = 'pro_large_attack'
+    PRO_LARGE_ATTACK = 'pro_large_attack'
 
 
 class SpriteSheet:
