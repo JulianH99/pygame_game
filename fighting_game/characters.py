@@ -132,3 +132,74 @@ class Bowsette(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Bowsette")
+
+class Miia(Character):
+
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Miia'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "MiiaBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Miia")
+
+
+class Ryyuko(Character):
+
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Ryuuko'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "RyuukoBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Ryuuko")
+
+class Saber(Character):
+
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Saber'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "SaberBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Saber")
+
+class Sailor(Character):
+
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Sailor'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "SailorBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Sailor")
+
+class Sakura(Character):
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Sakura'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "SakuraBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Sakura")
+
+class Virgo(Character):
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+        self.name = 'Virgo'
+
+    def get_base_image(self):
+        return Image.load(os.path.join(self.path, "VirgoBasicModel.png"))
+
+    def get_sprite_path(self):
+        return Path.path_to("sprite_sheets", "Virgo")
