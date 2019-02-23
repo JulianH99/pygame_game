@@ -25,6 +25,8 @@ maid = character_builder.character
 character_builder.change_class(Maid)
 character_director.set_builder(character_builder)
 
+character_director.construct()
+
 another_maid = character_builder.character
 
 
@@ -64,10 +66,18 @@ while not done:
     elif key_pressed[pygame.K_DOWN]:
         maid.trigger_animation(FightingAnimation.DEFENSE)
 
+    if another_maid.rect.centerx > maid.rect.centerx + 200:
+        another_maid.trigger_animation(MovingAnimation.LEFT)
+
+    elif another_maid.rect.centerx < maid.rect.centerx + 200:
+        another_maid.trigger_animation(MovingAnimation.RIGHT)
+
     win.blit(scaled_background, (0, 0))
 
     # for sprite in sprites.sprites():
     #     sprite.handle_keydown()
+
+    maid.collision_with_char(another_maid)
 
     sprites.update()
 

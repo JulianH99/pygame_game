@@ -54,6 +54,8 @@ class Character(pygame.sprite.Sprite):
         self.animation_step = 0
         self.current_index = 0
 
+        self.is_collision = False
+
     @abstractmethod
     def get_base_image(self):
         pass
@@ -92,10 +94,12 @@ class Character(pygame.sprite.Sprite):
             raise ValueError('animation should be a valid Animation type')
 
     def trigger_left(self):
-        self.rect.centerx -= self.speed
+        if self.rect.left > 0:
+            self.rect.centerx -= self.speed
 
     def trigger_right(self):
-        self.rect.centerx += self.speed
+        if self.rect.right < SCREEN_WIDTH:
+            self.rect.centerx += self.speed
 
     def update(self, *args):
         if self.playing_animation:
@@ -105,6 +109,18 @@ class Character(pygame.sprite.Sprite):
             else:
                 self.current_index = 0
                 self.playing_animation = None
+
+    def collision_with_char(self, character):
+        """
+        Checks if there's a collision between characters
+        :param character: character to check collision on
+        :type character: Character
+        """
+        collision = pygame.sprite.collide_rect(self, character)
+
+        if collision:
+            print("collided")
+        self.is_collision = collision
 
 
 class Maid(Character):

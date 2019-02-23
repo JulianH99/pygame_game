@@ -76,3 +76,25 @@ class SpriteSheet:
             image = Image.load(os.path.join(self.base_sprite_path, file_format))
             image.set_colorkey(BLACK)
             self.images.append(image)
+
+
+class AIWrapper:
+    def __init__(self):
+        self.char_around = None
+        self.char_to = None
+
+    def wrap_around(self, character):
+        """
+        Sets the character that's going to be handled by the AI
+        :param character: Character to be wrapped
+        :type character: Character
+        """
+        self.char_around = character
+
+    def follow(self, character):
+        """
+        Sets the character that will be taken as reference to perform actions in the AI
+        :param character:
+        :type character: Character
+        """
+        self.char_to = character
