@@ -2,7 +2,7 @@ import pygame
 import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
-from fighting_game.characters import Maid
+from fighting_game.characters import Maid, Bowsette
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
@@ -33,7 +33,12 @@ another_maid = character_builder.character
 maid.set_x_y((100, GROUND_AREA_Y))
 another_maid.set_x_y((400, GROUND_AREA_Y))
 
-print(maid)
+character_builder.change_class(Bowsette)
+character_director.set_builder(character_builder)
+
+bowsette = character_builder.character
+
+bowsette.set_x_y((400, GROUND_AREA_Y))
 
 background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
 
@@ -45,7 +50,7 @@ done = False
 sprites = pygame.sprite.Group()
 
 sprites.add(maid)
-sprites.add(another_maid)
+sprites.add(bowsette)
 
 
 clock = pygame.time.Clock()
@@ -69,14 +74,13 @@ while not done:
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
 
-    if another_maid.rect.centerx > maid.rect.centerx + 200:
-        another_maid.trigger_animation(MovingAnimation.LEFT)
-
-    elif another_maid.rect.centerx < maid.rect.centerx + 200:
-        another_maid.trigger_animation(MovingAnimation.RIGHT)
+    # if another_maid.rect.centerx > maid.rect.centerx + 200:
+    #     another_maid.trigger_animation(MovingAnimation.LEFT)
+    #
+    # elif another_maid.rect.centerx < maid.rect.centerx + 200:
+    #     another_maid.trigger_animation(MovingAnimation.RIGHT)
 
     win.blit(scaled_background, (0, 0))
-
 
     maid.collision_with_char(another_maid)
 

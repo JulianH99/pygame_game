@@ -149,6 +149,7 @@ class Bowsette(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Bowsette")
 
+
 class Miia(Character):
 
     def __init__(self, x=0, y=0):
@@ -174,6 +175,7 @@ class Ryyuko(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Ryuuko")
 
+
 class Saber(Character):
 
     def __init__(self, x=0, y=0):
@@ -185,6 +187,7 @@ class Saber(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Saber")
+
 
 class Sailor(Character):
 
@@ -198,6 +201,7 @@ class Sailor(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Sailor")
 
+
 class Sakura(Character):
     def __init__(self, x=0, y=0):
         super().__init__(x, y)
@@ -208,6 +212,7 @@ class Sakura(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Sakura")
+
 
 class Virgo(Character):
     def __init__(self, x=0, y=0):
