@@ -8,6 +8,8 @@ from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_ARE
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 
 
+ALLOWED_DISTANCE = 150
+
 pygame.init()
 
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -35,6 +37,8 @@ another_maid.set_x_y((400, GROUND_AREA_Y))
 
 character_builder.change_class(Bowsette)
 character_director.set_builder(character_builder)
+
+character_director.construct()
 
 bowsette = character_builder.character
 
@@ -74,11 +78,12 @@ while not done:
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
 
-    # if another_maid.rect.centerx > maid.rect.centerx + 200:
-    #     another_maid.trigger_animation(MovingAnimation.LEFT)
-    #
-    # elif another_maid.rect.centerx < maid.rect.centerx + 200:
-    #     another_maid.trigger_animation(MovingAnimation.RIGHT)
+    distance = maid.rect.centerx - bowsette.rect.centerx
+
+    # if abs(distance) < ALLOWED_DISTANCE:
+    #     bowsette.trigger_animation(MovingAnimation.LEFT)
+    # elif abs(distance) > ALLOWED_DISTANCE:
+    #     bowsette.trigger_animation(MovingAnimation.RIGHT)
 
     win.blit(scaled_background, (0, 0))
 
