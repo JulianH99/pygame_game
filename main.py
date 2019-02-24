@@ -1,9 +1,7 @@
 import pygame
-from fighting_game.helpers.image import Image
-from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
-from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
+from fighting_game.helpers.screen import GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.draw import redraw
 
@@ -34,17 +32,22 @@ print(maid)
 done = False
 
 
-sprites = pygame.sprite.Group()
-sprites2 = pygame.sprite.Group()
+player = pygame.sprite.Group()
+enemy = pygame.sprite.Group()
+totalSprites = pygame.sprite.Group()
 
-sprites.add(maid)
-sprites2.add(another_maid)
+player.add(maid)
+enemy.add(another_maid)
+totalSprites.add(player, enemy)
 
 draw = redraw()
 
+# This callback function is passed as the `collided`argument
+# to pygame.sprite.spritecollide or groupcollide.
 def collided(sprite, other):
     """Check if the hitboxes of the two sprites collide."""
     return sprite.hitbox.colliderect(other.hitbox)
+
 
 while not done:
 
@@ -52,11 +55,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    draw.draw(sprites)
-    draw.draw(sprites2)
-    #collided_sprites = pygame.sprite.spritecollide(sprites, sprites2, False, collided)
-    #for sp in collided_sprites:
-    #    print('Collision', sp)
+    draw.draw(totalSprites)
 
     key_pressed = pygame.key.get_pressed()
 
@@ -70,5 +69,9 @@ while not done:
         maid.trigger_animation(FightingAnimation.FIST)
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+
+    #collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
+    #for sp in collided_sprites:
+     #   print('Collision', sp)
 
 pygame.quit()
