@@ -6,7 +6,7 @@ from fighting_game.helpers.colors import *
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
-from fighting_game.helpers.screen import SCREEN_WIDTH
+from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT
 from typing import Tuple
 
 
@@ -17,8 +17,8 @@ class Character(pygame.sprite.Sprite):
     width = 64
     height = 64
 
-    def __init__(self, x=0, y=0):
-        super().__init__()
+    def __init__(self, x=0, y=0, *groups):
+        super().__init__(*groups)
 
         self.name = None
         # Path to sprite images
@@ -53,6 +53,15 @@ class Character(pygame.sprite.Sprite):
         self.playing_animation: SpriteSheet = None
         self.animation_step = 0
         self.current_index = 0
+
+        # Creation of the Hitbox
+        self.hitbox = (self.x + 20, self.y, 28, 60)
+        win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+        scaled_background = Image.scale_to_window(background)
+        win.blit(scaled_background, (0, 0))
+
+        self.win = win
 
     @abstractmethod
     def get_base_image(self):
@@ -98,15 +107,21 @@ class Character(pygame.sprite.Sprite):
     def trigger_right(self):
         self.rect.centerx += self.speed
 
+    def draw_hitbox(self):
+        self.hitbox= self.hitbox = (self.rect.centerx-24, self.rect.centery-24, 48, 48)
+        pygame.draw.rect(self.win, (255, 0, 0), self.hitbox, 2)
+
     def update(self, *args):
+        self.draw_hitbox()
         if self.playing_animation:
             if self.current_index < len(self.playing_animation.images):
                 self.image = self.playing_animation.images[self.current_index]
                 self.current_index += 1
+                self.draw_hitbox()
+
             else:
                 self.current_index = 0
                 self.playing_animation = None
-
 
 class Maid(Character):
 

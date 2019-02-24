@@ -1,16 +1,13 @@
 import pygame
-import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
-
+from fighting_game.draw import redraw
 
 pygame.init()
-
-win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("TEST GAME")
 
@@ -31,28 +28,35 @@ another_maid = character_builder.character
 maid.set_x_y((100, GROUND_AREA_Y))
 another_maid.set_x_y((400, GROUND_AREA_Y))
 
+
 print(maid)
-
-background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
-
-scaled_background = Image.scale_to_window(background)
 
 done = False
 
 
 sprites = pygame.sprite.Group()
+sprites2 = pygame.sprite.Group()
 
 sprites.add(maid)
-sprites.add(another_maid)
+sprites2.add(another_maid)
 
+draw = redraw()
 
-clock = pygame.time.Clock()
+def collided(sprite, other):
+    """Check if the hitboxes of the two sprites collide."""
+    return sprite.hitbox.colliderect(other.hitbox)
 
 while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+
+    draw.draw(sprites)
+    draw.draw(sprites2)
+    #collided_sprites = pygame.sprite.spritecollide(sprites, sprites2, False, collided)
+    #for sp in collided_sprites:
+    #    print('Collision', sp)
 
     key_pressed = pygame.key.get_pressed()
 
@@ -66,17 +70,5 @@ while not done:
         maid.trigger_animation(FightingAnimation.FIST)
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-
-    win.blit(scaled_background, (0, 0))
-
-
-    sprites.update()
-
-    sprites.draw(win)
-
-    pygame.display.flip()
-
-    clock.tick(27)
-
 
 pygame.quit()
