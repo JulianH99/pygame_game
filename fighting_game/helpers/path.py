@@ -16,7 +16,8 @@ class Path:
             Path.paths = {
                 "assets": path.join(cwd, "assets"),
                 "sprite_sheets": path.join(cwd, "assets", "sprites", "SpriteSheets"),
-                "backgrounds": path.join(cwd, "assets", "sprites", "Backgrounds")
+                "backgrounds": path.join(cwd, "assets", "sprites", "Backgrounds"),
+                "profile": path.join(cwd, "assets", "sprites", "Profile")
             }
 
         return Path.paths
