@@ -17,7 +17,7 @@ class Character(pygame.sprite.Sprite):
     width = 64
     height = 64
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, facing_right=True):
         super().__init__()
 
         self.name = None
@@ -50,6 +50,9 @@ class Character(pygame.sprite.Sprite):
             "large_attack": False
         }
 
+        self.facing_right = True
+        self.flipped = False
+
         self.playing_animation: SpriteSheet = None
         self.animation_step = 0
         self.current_index = 0
@@ -74,23 +77,61 @@ class Character(pygame.sprite.Sprite):
         self.rect.centery = x_y[1]
         self.rect.centerx = x_y[0]
 
+    def change_direction(self, direction):
+        """
+        Changes the direction of the sprite
+        :param direction:
+        :return:
+        """
+
+        self.facing_right = direction
+
+        if self.facing_right and self.flipped:
+            self.unflip()
+        elif not self.facing_right and not self.flipped:
+            self.flip()
+
+    def __perform_flip(self):
+        for sprite_sheet in self.sprite_sheets.values():
+            sprite_sheet.perform_flip()
+
+    def flip(self):
+        print("flipping")
+        self.__perform_flip()
+        self.flipped = True
+
+    def unflip(self):
+        print("unflipping")
+        self.__perform_flip()
+        self.flipped = False
+
     def add_sprite_sheet(self, key: str, sprite_sheet: SpriteSheet):
         if key in self.sprite_sheets:
             raise KeyError("{} is already defined".format(key))
         self.sprite_sheets[key] = sprite_sheet
 
     def trigger_animation(self, animation):
+        """
+        Triggers an animation in the character
+        :param animation: animation to be triggered
+        :raises: KeyError
+
+        """
         if isinstance(animation, MovingAnimation) or \
                 isinstance(animation, FightingAnimation) or \
                 isinstance(animation, ProFightingAnimation):
-            self.playing_animation = self.sprite_sheets[animation.value]
 
-            if animation == MovingAnimation.LEFT:
-                self.trigger_left()
+            try:
+                self.playing_animation = self.sprite_sheets[animation.value]
 
-            if animation == MovingAnimation.RIGHT:
-                self.trigger_right()
+                if animation == MovingAnimation.WALK:
+                    if not self.facing_right:
+                        self.trigger_left()
+                    else:
+                        self.trigger_right()
 
+            except KeyError:
+                print("The requested animation {} does not exists".format(animation.value))
         else:
             raise ValueError('animation should be a valid Animation type')
 
@@ -104,6 +145,9 @@ class Character(pygame.sprite.Sprite):
 
     def update(self, *args):
         if self.playing_animation:
+
+
+
             if self.current_index < len(self.playing_animation.images):
                 self.image = self.playing_animation.images[self.current_index]
                 self.current_index += 1

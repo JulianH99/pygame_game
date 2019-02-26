@@ -1,6 +1,7 @@
+import pygame
 from enum import Enum
 from typing import List
-from pygame import Surface
+
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.colors import BLACK
 import os
@@ -10,8 +11,7 @@ class MovingAnimation(Enum):
     """
     Animation types for making common strings to access moving sprite sheets
     """
-    LEFT = 'left'
-    RIGHT = 'right'
+    WALK = 'walk'
     JUMP = 'jump'
 
     def __str__(self):
@@ -25,6 +25,7 @@ class FightingAnimation(Enum):
     FIST = 'fist'
     DEFENSE = 'defense'
     LARGE_ATTACK = 'large_attack'
+    DIE = 'die'
 
 
 class ProFightingAnimation(Enum):
@@ -55,7 +56,7 @@ class SpriteSheet:
         self.frames: int = frames
         self.key_name: str = None
         self.base_file_name: str = None
-        self.images: List[Surface] = []
+        self.images: List[pygame.Surface] = []
 
     def load_images(self):
         """
@@ -76,6 +77,18 @@ class SpriteSheet:
             image = Image.load(os.path.join(self.base_sprite_path, file_format))
             image.set_colorkey(BLACK)
             self.images.append(image)
+
+    def perform_flip(self):
+        animation = self.images[:]
+
+        animation.clear()
+
+        for image in self.images:
+            animation.append(
+                pygame.transform.flip(image, True, False)
+            )
+
+        self.images = animation
 
 
 class AIWrapper:

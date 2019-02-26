@@ -1,5 +1,4 @@
 import abc
-import copy
 import os
 from fighting_game.characters import Character
 from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
@@ -15,9 +14,8 @@ class CharacterDirector:
         self.character_builder = character_builder
 
     def construct(self):
-        self.character_builder.build_right_animation()
+        self.character_builder.build_walk_animation()
         self.character_builder.build_jump_animation()
-        self.character_builder.build_left_animation()
         self.character_builder.build_defense_animation()
         self.character_builder.build_pro_defense_animation()
         self.character_builder.build_fist_animation()
@@ -53,14 +51,7 @@ class AbstractCharacterBuilder(abc.ABC):
         self._character = ch_class()
 
     @abc.abstractmethod
-    def build_right_animation(self):
-        """
-        Builds the right running animation for the character
-        """
-        pass
-
-    @abc.abstractmethod
-    def build_left_animation(self):
+    def build_walk_animation(self):
         """
         Build the left running animation for the character
         :return:
@@ -147,37 +138,20 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         self._character: Character = ch_class()
 
-    def build_right_animation(self):
+    def build_walk_animation(self):
+        base_name = self._character.name + 'Walk'
 
-        base_name = self._character.name + 'Right'
-
-        right_animation = SpriteSheet(
+        walk_animation = SpriteSheet(
             base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
             frames=8
         )
 
-        right_animation.base_file_name = base_name
-        right_animation.key_name = self._character.name.lower() + '_right'
+        walk_animation.base_file_name = base_name
+        walk_animation.key_name = self._character.name.lower() + '_walk'
 
-        right_animation.load_images()
+        walk_animation.load_images()
 
-        self._character.add_sprite_sheet(MovingAnimation.RIGHT.value, right_animation)
-        pass
-
-    def build_left_animation(self):
-        base_name = self._character.name + 'Left'
-
-        left_animation = SpriteSheet(
-            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
-            frames=8
-        )
-
-        left_animation.base_file_name = base_name
-        left_animation.key_name = self._character.name.lower() + '_left'
-
-        left_animation.load_images()
-
-        self._character.add_sprite_sheet(MovingAnimation.LEFT.value, left_animation)
+        self._character.add_sprite_sheet(MovingAnimation.WALK.value, walk_animation)
         pass
 
     def build_jump_animation(self):
