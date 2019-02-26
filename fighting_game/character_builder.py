@@ -25,7 +25,7 @@ class CharacterDirector:
         self.character_builder.build_static_animation()
 
         "The method die is giving problems"
-        # self.character_builder.build_die_animation()
+        #self.character_builder.build_die_animation()
 
     def set_builder(self, character_builder):
         """
@@ -281,7 +281,7 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         die_animation.load_images()
 
-        self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, die_animation)
+        self._character.add_sprite_sheet(FightingAnimation.DIE.value, die_animation)
         pass
 
     def build_static_animation(self):
@@ -297,5 +297,5 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         static_animation.load_images()
 
-        # self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, static_animation)
+        self._character.add_sprite_sheet(MovingAnimation.STATIC.value, static_animation)
         pass

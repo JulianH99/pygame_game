@@ -13,6 +13,7 @@ class MovingAnimation(Enum):
     """
     WALK = 'walk'
     JUMP = 'jump'
+    STATIC = 'static'
 
     def __str__(self):
         return self.value
