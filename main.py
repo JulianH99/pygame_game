@@ -3,7 +3,7 @@ import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid, Bowsette
-from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
+from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 
@@ -64,9 +64,11 @@ while not done:
     key_pressed = pygame.key.get_pressed()
 
     if key_pressed[pygame.K_LEFT]:
-        maid.trigger_animation(MovingAnimation.LEFT)
+        maid.trigger_animation(MovingAnimation.WALK)
+        maid.change_direction(False)
     elif key_pressed[pygame.K_RIGHT]:
-        maid.trigger_animation(MovingAnimation.RIGHT)
+        maid.trigger_animation(MovingAnimation.WALK)
+        maid.change_direction(True)
     elif key_pressed[pygame.K_DOWN]:
         maid.trigger_animation(FightingAnimation.DEFENSE)
     elif key_pressed[pygame.K_z]:

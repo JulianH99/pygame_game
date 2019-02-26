@@ -1,5 +1,4 @@
 import abc
-import copy
 import os
 from fighting_game.characters import Character
 from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
@@ -15,9 +14,8 @@ class CharacterDirector:
         self.character_builder = character_builder
 
     def construct(self):
-        self.character_builder.build_right_animation()
+        self.character_builder.build_walk_animation()
         self.character_builder.build_jump_animation()
-        self.character_builder.build_left_animation()
         self.character_builder.build_defense_animation()
         self.character_builder.build_pro_defense_animation()
         self.character_builder.build_fist_animation()
@@ -27,7 +25,7 @@ class CharacterDirector:
         self.character_builder.build_static_animation()
 
         "The method die is giving problems"
-        #self.character_builder.build_die_animation()
+        # self.character_builder.build_die_animation()
 
     def set_builder(self, character_builder):
         """
@@ -53,14 +51,7 @@ class AbstractCharacterBuilder(abc.ABC):
         self._character = ch_class()
 
     @abc.abstractmethod
-    def build_right_animation(self):
-        """
-        Builds the right running animation for the character
-        """
-        pass
-
-    @abc.abstractmethod
-    def build_left_animation(self):
+    def build_walk_animation(self):
         """
         Build the left running animation for the character
         :return:
@@ -147,37 +138,20 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         self._character: Character = ch_class()
 
-    def build_right_animation(self):
+    def build_walk_animation(self):
+        base_name = self._character.name + 'Walk'
 
-        base_name = self._character.name + 'Right'
-
-        right_animation = SpriteSheet(
+        walk_animation = SpriteSheet(
             base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
             frames=8
         )
 
-        right_animation.base_file_name = base_name
-        right_animation.key_name = self._character.name.lower() + '_right'
+        walk_animation.base_file_name = base_name
+        walk_animation.key_name = self._character.name.lower() + '_walk'
 
-        right_animation.load_images()
+        walk_animation.load_images()
 
-        self._character.add_sprite_sheet(MovingAnimation.RIGHT.value, right_animation)
-        pass
-
-    def build_left_animation(self):
-        base_name = self._character.name + 'Left'
-
-        left_animation = SpriteSheet(
-            base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
-            frames=8
-        )
-
-        left_animation.base_file_name = base_name
-        left_animation.key_name = self._character.name.lower() + '_left'
-
-        left_animation.load_images()
-
-        self._character.add_sprite_sheet(MovingAnimation.LEFT.value, left_animation)
+        self._character.add_sprite_sheet(MovingAnimation.WALK.value, walk_animation)
         pass
 
     def build_jump_animation(self):
@@ -193,7 +167,7 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         jump_animation.load_images()
 
-        self._character.add_sprite_sheet(MovingAnimation.JUMP, jump_animation)
+        self._character.add_sprite_sheet(MovingAnimation.JUMP.value, jump_animation)
         pass
 
     def build_fist_animation(self):
@@ -231,33 +205,33 @@ class CharacterBuilder(AbstractCharacterBuilder):
     def build_large_attack_animation(self):
         base_name = self._character.name + 'LargeAttack'
 
-        largeAttack_animation = SpriteSheet(
+        large_attack_animation = SpriteSheet(
             base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
             frames=8
         )
 
-        largeAttack_animation.base_file_name = base_name
-        largeAttack_animation.key_name = self._character.name.lower() + '_largeAttack'
+        large_attack_animation.base_file_name = base_name
+        large_attack_animation.key_name = self._character.name.lower() + '_largeAttack'
 
-        largeAttack_animation.load_images()
+        large_attack_animation.load_images()
 
-        self._character.add_sprite_sheet(FightingAnimation.LARGE_ATTACK.value, largeAttack_animation)
+        self._character.add_sprite_sheet(FightingAnimation.LARGE_ATTACK.value, large_attack_animation)
         pass
 
     def build_pro_large_attack_animation(self):
         base_name = self._character.name + 'ProLargeAttack'
 
-        pro_largeAttack_animation = SpriteSheet(
+        pro_large_attack_animation = SpriteSheet(
             base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
             frames=8
         )
 
-        pro_largeAttack_animation.base_file_name = base_name
-        pro_largeAttack_animation.key_name = self._character.name.lower() + '_pro_largeAttack'
+        pro_large_attack_animation.base_file_name = base_name
+        pro_large_attack_animation.key_name = self._character.name.lower() + '_pro_largeAttack'
 
-        pro_largeAttack_animation.load_images()
+        pro_large_attack_animation.load_images()
 
-        self._character.add_sprite_sheet(ProFightingAnimation.PRO_LARGE_ATTACK.value, pro_largeAttack_animation)
+        self._character.add_sprite_sheet(ProFightingAnimation.PRO_LARGE_ATTACK.value, pro_large_attack_animation)
         pass
 
     def build_defense_animation(self):
@@ -323,5 +297,5 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         static_animation.load_images()
 
-        #self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, static_animation)
+        # self._character.add_sprite_sheet(ProFightingAnimation.PRO_DEFENSE.value, static_animation)
         pass
