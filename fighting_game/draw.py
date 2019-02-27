@@ -53,7 +53,8 @@ transparentSurface = pygame.Surface((150,200))  # the size of your rect
 transparentSurface.set_alpha(0)                # alpha level
 transparentSurface.fill((255,255,255))           # this fills the entire surface
 
-class redraw():
+
+class Redraw:
     character_menu = True
     first_menu = True
 
