@@ -1,45 +1,100 @@
-import sys, pygame
-from pygame.locals import *
-from pygame_functions import *
+import pygame
+import os
+from fighting_game.helpers.image import Image
+from fighting_game.helpers.path import Path
+from fighting_game.characters import Maid, Bowsette
+from fighting_game.dynamics import MovingAnimation, FightingAnimation
+from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
+from fighting_game.characters import Maid
+from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
+from fighting_game.helpers.screen import GROUND_AREA_Y
+from fighting_game.character_builder import CharacterDirector, CharacterBuilder
+from fighting_game.draw import redraw
 
-screenSize(800, 400)
-setBackgroundImage("assets\\sprites\\Backgrounds\\BackgroundLeafVillage.png")
-testSprite = makeSprite("assets\\sprites\\SpriteSheets\\Maid\\Maid.png", 32)
-# 32)  links.gif contains 32 separate frames of animation.
+ALLOWED_DISTANCE = 150
 
-moveSprite(testSprite, 300, 300, True)
-showSprite(testSprite)
+pygame.init()
 
-nextFrame = clock()
-frame = 0
-
-xpos = 200
-ypos= 200
-xspeed = 0
-go = 0
-
-while True:
-    if clock() > nextFrame:                         # We only animate our character every 80ms.
-        frame = (frame+1) % 8                         # There are 8 frames of animation in each direction
-        nextFrame += 200                             # so the modulus 8 allows it to loop
-        changeSpriteImage(testSprite, 1)
-    if keyPressed("z"):
-        changeSpriteImage(testSprite, 1 * 8 + frame)
-    if keyPressed("right"):
-        changeSpriteImage(testSprite, 2 * 8 + frame)  # 0*8 because right animations are the 0th set in the sprite sheet
-        """go = 2
-        xpos += xspeed
-        moveSprite(testSprite, xpos, 0)
-        xspeed += 1 - go"""
-    if keyPressed("down"):
-        changeSpriteImage(testSprite, 3 * 8 + frame)
-    #else:
-        #changeSpriteImage(testSprite, 0*8 + frame)
-    tick(120)
-
-    for eventos in pygame.event.get():
-        if eventos.type == QUIT:
-            sys.exit(0)
+pygame.display.set_caption("TEST GAME")
 
 
-#  endWait()
+character_builder = CharacterBuilder(Maid)
+character_director = CharacterDirector(character_builder)
+
+character_director.construct()
+
+maid = character_builder.character
+
+character_builder.change_class(Maid)
+character_director.set_builder(character_builder)
+
+character_director.construct()
+
+another_maid = character_builder.character
+
+
+maid.set_x_y((100, GROUND_AREA_Y))
+another_maid.set_x_y((400, GROUND_AREA_Y))
+
+character_builder.change_class(Bowsette)
+character_director.set_builder(character_builder)
+
+character_director.construct()
+
+bowsette = character_builder.character
+
+bowsette.set_x_y((400, GROUND_AREA_Y))
+
+background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+
+print(maid)
+
+done = False
+
+
+player = pygame.sprite.Group()
+enemy = pygame.sprite.Group()
+totalSprites = pygame.sprite.Group()
+
+player.add(maid)
+enemy.add(another_maid)
+totalSprites.add(player, enemy)
+
+draw = redraw()
+
+
+# This callback function is passed as the `collided`argument
+# to pygame.sprite.spritecollide or groupcollide.
+def collided(sprite, other):
+    """Check if the hitboxes of the two sprites collide."""
+    return sprite.hitbox.colliderect(other.hitbox)
+
+
+while not done:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+
+    draw.draw(totalSprites)
+
+    key_pressed = pygame.key.get_pressed()
+
+    if key_pressed[pygame.K_LEFT]:
+        maid.trigger_animation(MovingAnimation.WALK)
+        maid.change_direction(False)
+    elif key_pressed[pygame.K_RIGHT]:
+        maid.trigger_animation(MovingAnimation.WALK)
+        maid.change_direction(True)
+    elif key_pressed[pygame.K_DOWN]:
+        maid.trigger_animation(FightingAnimation.DEFENSE)
+    elif key_pressed[pygame.K_z]:
+        maid.trigger_animation(FightingAnimation.FIST)
+    elif key_pressed[pygame.K_x]:
+        maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+
+    #collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
+    #for sp in collided_sprites:
+     #   print('Collision', sp)
+
+pygame.quit()
