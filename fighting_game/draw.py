@@ -111,7 +111,6 @@ class Redraw:
     def selection_character(self):
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
-
             if 50 + 200 > mouse[0] > 50 and 60 + 150 > mouse[1] > 60:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
@@ -170,8 +169,8 @@ class Redraw:
 
         elif self.character_menu:
 
-            self.selection_character()
             self.print_character()
+            self.selection_character()
 
         else:
             win.blit(scaled_background, (0, 0))

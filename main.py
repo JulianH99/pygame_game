@@ -9,7 +9,7 @@ from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
 from fighting_game.helpers.screen import GROUND_AREA_Y
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
-from fighting_game.draw import Redraw
+from fighting_game.draw import redraw
 
 ALLOWED_DISTANCE = 150
 
@@ -60,7 +60,7 @@ player.add(maid)
 enemy.add(another_maid)
 totalSprites.add(player, enemy)
 
-draw = Redraw()
+draw = redraw()
 
 
 # This callback function is passed as the `collided`argument
