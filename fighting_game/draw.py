@@ -91,7 +91,7 @@ class Redraw:
 
         win.blit(scaled_background_menu, (0, 0))
 
-        if 300 + 200 > mouse[0] > 300 and 250 + 50 > mouse[1] > 250:
+        if 500 > mouse[0] > 300 > mouse[1] > 250:
 
             pygame.draw.rect(win, red, (300, 250, 200, 50))
 
