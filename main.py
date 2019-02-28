@@ -7,15 +7,21 @@ from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
-from fighting_game.helpers.screen import GROUND_AREA_Y
+
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
-from fighting_game.draw import Redraw
+# from fighting_game.draw import Redraw
+from fighting_game.screen import ScreenManager, InitialScreen, CharacterSelectionScreen
 
 ALLOWED_DISTANCE = 150
 
 pygame.init()
 
 pygame.display.set_caption("TEST GAME")
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+scaled_background = Image.scale_to_window(background)
 
 
 character_builder = CharacterBuilder(Maid)
@@ -45,8 +51,6 @@ bowsette = character_builder.character
 
 bowsette.set_x_y((400, GROUND_AREA_Y))
 
-background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
-
 print(maid)
 
 done = False
@@ -58,9 +62,20 @@ totalSprites = pygame.sprite.Group()
 
 player.add(maid)
 enemy.add(another_maid)
+
 totalSprites.add(player, enemy)
 
-draw = Redraw()
+# draw = Redraw()
+
+clock = pygame.time.Clock()
+
+# screen_manager = ScreenManager(screen)
+#
+# initial_screen = InitialScreen()
+# characters_screen = CharacterSelectionScreen()
+#
+# screen_manager.add_screen('start', initial_screen)
+# screen_manager.add_screen('characters', characters_screen)
 
 
 # This callback function is passed as the `collided`argument
@@ -76,7 +91,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    draw.draw(totalSprites)
+    # draw.draw(totalSprites)
 
     key_pressed = pygame.key.get_pressed()
 
@@ -93,8 +108,18 @@ while not done:
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
 
-    #collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
-    #for sp in collided_sprites:
-     #   print('Collision', sp)
+    # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
+    # for sp in collided_sprites:
+    #   print('Collision', sp)
+
+    totalSprites.update()
+
+    totalSprites.draw(screen)
+
+    pygame.display.flip()
+
+    screen.blit(scaled_background, (0 , 0))
+
+    clock.tick(27)
 
 pygame.quit()

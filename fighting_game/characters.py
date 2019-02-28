@@ -16,6 +16,8 @@ class Character(pygame.sprite.Sprite):
     """
     width = 64
     height = 64
+
+    card_size = (150, 300)
   
     def __init__(self, x=0, y=0, *groups, facing_right=True):
         super().__init__(*groups)
@@ -74,6 +76,12 @@ class Character(pygame.sprite.Sprite):
     @abstractmethod
     def get_sprite_path(self):
         pass
+
+    @staticmethod
+    def get_card_image(name: str):
+        image = Image.load(Path.path_to("profile", "{}_character.png".format(name.lower())))
+
+        return pygame.transform.scale(image, Character.card_size)
 
     def set_x_y(self, x_y):
         """
@@ -151,20 +159,13 @@ class Character(pygame.sprite.Sprite):
         if self.rect.right < SCREEN_WIDTH:
             self.rect.centerx += self.speed
 
-    def draw_hitbox(self):
-        self.hitbox= self.hitbox = (self.rect.centerx-24, self.rect.centery-24, 48, 48)
-        pygame.draw.rect(self.win, (255, 0, 0), self.hitbox, 2)
-
     def update(self, *args):
-        self.draw_hitbox()
+
         if self.playing_animation:
-
-
 
             if self.current_index < len(self.playing_animation.images):
                 self.image = self.playing_animation.images[self.current_index]
                 self.current_index += 1
-                self.draw_hitbox()
 
             else:
                 self.current_index = 0

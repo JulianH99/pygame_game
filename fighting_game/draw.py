@@ -2,6 +2,7 @@ import pygame
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
+from fighting_game.helpers.colors import *
 
 pygame.init()
 
@@ -15,16 +16,10 @@ scaled_background_character = Image.scale_to_window(background_character)
 scaled_background_menu = Image.scale_to_window(background_menu)
 scaled_background = Image.scale_to_window(background)
 
-# Colors
-black = (0,0,0)
-white = (255, 255, 255)
-red = (200, 0, 0)
-bright_red = (255, 0, 0)
-
 # Fonts
 title_font = pygame.font.SysFont("Comic Sans MS", 50)
 text_font = pygame.font.SysFont("Comic Sans MS", 30)
-game_start = text_font.render("START GAME", True, black)
+game_start = text_font.render("START GAME", True, BLACK)
 
 # Clock
 clock = pygame.time.Clock()
@@ -60,7 +55,7 @@ class Redraw:
 
     def print_character(self):
 
-        win.fill(black)
+        win.fill(BLACK)
 
         win.blit(bowsette, (50, 60))
         win.blit(transparentSurface, (50, 60))
@@ -93,14 +88,14 @@ class Redraw:
 
         if 500 > mouse[0] > 300 > mouse[1] > 250:
 
-            pygame.draw.rect(win, red, (300, 250, 200, 50))
+            pygame.draw.rect(win, RED, (300, 250, 200, 50))
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.first_menu = False
         else:
-            pygame.draw.rect(win, bright_red, (300, 250, 200, 50))
+            pygame.draw.rect(win, BRIGHT_RED, (300, 250, 200, 50))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
