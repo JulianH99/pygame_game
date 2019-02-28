@@ -54,7 +54,7 @@ bowsette.set_x_y((400, GROUND_AREA_Y))
 print(maid)
 
 done = False
-
+isJump = False
 
 player = pygame.sprite.Group()
 enemy = pygame.sprite.Group()
@@ -107,7 +107,8 @@ while not done:
         maid.trigger_animation(FightingAnimation.FIST)
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-
+    elif key_pressed[pygame.K_SPACE]:
+        maid.trigger_animation(MovingAnimation.JUMP)
     # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
     # for sp in collided_sprites:
     #   print('Collision', sp)
@@ -121,5 +122,9 @@ while not done:
     screen.blit(scaled_background, (0 , 0))
 
     clock.tick(27)
+    
+    #collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
+    #for sp in collided_sprites:
+     #   print('Collision', sp)
 
 pygame.quit()
