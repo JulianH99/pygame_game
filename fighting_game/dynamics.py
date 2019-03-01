@@ -1,10 +1,11 @@
 import pygame
 from enum import Enum
 from typing import List
-
 from fighting_game.helpers.image import Image
-from fighting_game.helpers.colors import BLACK
+from fighting_game.helpers.colors import BLACK, RED
 import os
+from fighting_game.helpers.screen import SCREEN_WIDTH
+import math
 
 
 class MovingAnimation(Enum):
@@ -92,6 +93,24 @@ class SpriteSheet:
         self.images = animation
 
 
+class Attributes:
+    """
+    Class used to manage character attributes
+    :version: 1
+    """
+    def __init__(self, attack, speed, defense):
+
+        attributes = [attack, speed, defense]
+
+        for attr in attributes:
+            if attr < 0 or attr > 100:
+                raise ValueError('Any of the attributes can be less than 0 or greater than 100')
+
+        self.speed = speed
+        self.defense = defense
+        self.attack = attack
+
+
 class AIWrapper:
     def __init__(self):
         self.char_around = None
@@ -112,3 +131,40 @@ class AIWrapper:
         :type character: Character
         """
         self.char_to = character
+
+
+class LifeBar:
+    def __init__(self, screen, character):
+        """
+        Initializes the life bar
+        :param screen: pygame Screen surface
+        :type screen: Surface
+        :param character: Character that will be used to display the life bar
+        :type character: Character
+        """
+        self.character = character
+        self.screen = screen
+        self.width = math.floor((SCREEN_WIDTH / 2) - 50)
+        self.inner_width = self.width - 5
+        self.life_points = character.life_points
+        print("inner with {}".format(self.inner_width))
+        self.outer_rect = pygame.Rect(20, 20, self.width + 5, 30)
+        self.inner_rect = self.build_life_bar_rect()
+
+    def draw(self):
+        self.calculate()
+        pygame.draw.rect(self.screen, RED, self.outer_rect)
+        if self.inner_width > 0:
+            pygame.draw.rect(self.screen, BLACK, self.inner_rect)
+
+    def calculate(self):
+
+        if self.character.life_points <= 0:
+            self.inner_width = 0
+        else:
+            self.inner_width = math.floor((self.character.life_points * (self.width - 5)) / 100)
+        print("life {}, width {}, inner_width {}".format(self.character.life_points, self.width - 5, self.inner_width))
+        self.inner_rect = self.build_life_bar_rect()
+
+    def build_life_bar_rect(self):
+        return pygame.Rect(25, 25, self.inner_width, 20)

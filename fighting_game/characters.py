@@ -5,7 +5,8 @@ from typing import Dict
 from fighting_game.helpers.colors import BLACK, WHITE
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
-from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation
+from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimation, ProFightingAnimation, \
+    Attributes
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT
 from typing import Tuple
 
@@ -49,29 +50,30 @@ class Character(pygame.sprite.Sprite):
 
         self.sprite_sheets: Dict[str, SpriteSheet] = {}
 
-        self.states = {
-            "right": False,
-            "left": False,
-            "attack": False,
-            "large_attack": False
-        }
+        self.facing_right = facing_right
 
-        self.facing_right = True
-        self.flipped = False
+        if not self.facing_right:
+            self.flipped = True
+            self.flip()
+        else:
+            self.flipped = False
 
         self.playing_animation: SpriteSheet = None
+
+        self.attributes: Attributes = self.get_attributes()
+
+        self.defending = False
+
+        self.life_points = 100
+
         self.animation_step = 0
         self.current_index = 0
-
-        self.is_collision = False
         # Creation of the Hitbox
         self.hitbox = (self.x + 20, self.y, 28, 60)
-        win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
-        scaled_background = Image.scale_to_window(background)
-        win.blit(scaled_background, (0, 0))
 
-        self.win = win
+    @abstractmethod
+    def get_attributes(self):
+        pass
 
     @abstractmethod
     def get_base_image(self):
@@ -144,6 +146,12 @@ class Character(pygame.sprite.Sprite):
             try:
                 self.playing_animation = self.sprite_sheets[animation.value]
 
+                if animation != FightingAnimation.DEFENSE:
+                    print("different animation")
+                    self.defending = False
+                else:
+                    self.defending = True
+
                 if animation == MovingAnimation.WALK:
                     if not self.facing_right:
                         self.trigger_left()
@@ -152,7 +160,6 @@ class Character(pygame.sprite.Sprite):
                 elif animation == MovingAnimation.JUMP:
                     self.isJump = True
                     self.trigger_jump()
-
             except KeyError:
                 print("The requested animation {} does not exists".format(animation.value))
         else:
@@ -166,9 +173,7 @@ class Character(pygame.sprite.Sprite):
         if self.rect.right < SCREEN_WIDTH:
             self.rect.centerx += self.speed
 
-
     def trigger_jump(self):
-        print(self.rect.centery)
         while self.isJump:
                 if self.jumpCount >= -10:
                     neg = 1
@@ -176,8 +181,8 @@ class Character(pygame.sprite.Sprite):
                         neg = -1
                     var = (self.jumpCount ** 2) * 0.5 * neg
                     self.rect.centery -= round(var)
-                    print(str(self.rect.centery) + ' '+ str(round(var)))
                     self.jumpCount -= 1
+                    print(self.rect.centery)
                 else:
                     self.isJump = False
                     self.jumpCount = 10
@@ -203,8 +208,16 @@ class Character(pygame.sprite.Sprite):
         collision = pygame.sprite.collide_rect(self, character)
 
         if collision:
-            print("collided")
-        self.is_collision = collision
+            if character.defending:
+                sub_val = (character.attributes.defense * self.attributes.attack) / 100
+                attack_val = self.attributes.attack - sub_val
+
+            else:
+                attack_val = self.attributes.attack / 10
+
+            print(attack_val)
+
+
 
 
 class Maid(Character):
@@ -219,6 +232,13 @@ class Maid(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Maid")
 
+    def get_attributes(self):
+        return Attributes(
+            attack=50,
+            speed=80,
+            defense=90
+        )
+
 
 class Bowsette(Character):
 
@@ -231,6 +251,13 @@ class Bowsette(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Bowsette")
+
+    def get_attributes(self):
+        return Attributes(
+            attack=80,
+            speed=40,
+            defense=70
+        )
 
 
 class Miia(Character):
@@ -245,6 +272,13 @@ class Miia(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Miia")
 
+    def get_attributes(self):
+        return Attributes(
+            defense=80,
+            attack=60,
+            speed=90
+        )
+
 
 class Ryyuko(Character):
 
@@ -257,6 +291,13 @@ class Ryyuko(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Ryuuko")
+
+    def get_attributes(self):
+        return Attributes(
+            attack=90,
+            defense=80,
+            speed=70
+        )
 
 
 class Saber(Character):
@@ -271,6 +312,13 @@ class Saber(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Saber")
 
+    def get_attributes(self):
+        return Attributes(
+            attack=80,
+            speed=50,
+            defense=90
+        )
+
 
 class Sailor(Character):
 
@@ -284,6 +332,13 @@ class Sailor(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Sailor")
 
+    def get_attributes(self):
+        return Attributes(
+            attack=70,
+            speed=80,
+            defense=70
+        )
+
 
 class Sakura(Character):
     def __init__(self, x=0, y=0):
@@ -296,6 +351,13 @@ class Sakura(Character):
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Sakura")
 
+    def get_attributes(self):
+        return Attributes(
+            defense=80,
+            attack=70,
+            speed=40
+        )
+
 
 class Virgo(Character):
     def __init__(self, x=0, y=0):
@@ -307,3 +369,10 @@ class Virgo(Character):
 
     def get_sprite_path(self):
         return Path.path_to("sprite_sheets", "Virgo")
+
+    def get_attributes(self):
+        return Attributes(
+            speed=60,
+            attack=70,
+            defense=30
+        )

@@ -3,11 +3,11 @@ import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid, Bowsette
-from fighting_game.dynamics import MovingAnimation, FightingAnimation
+from fighting_game.dynamics import LifeBar
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
-
+from fighting_game.helpers.colors import RED
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 # from fighting_game.draw import Redraw
 from fighting_game.screen import ScreenManager, InitialScreen, CharacterSelectionScreen
@@ -63,12 +63,14 @@ totalSprites = pygame.sprite.Group()
 player.add(maid)
 enemy.add(another_maid)
 
-totalSprites.add(player, enemy)
+totalSprites.add(player)
 
 # draw = Redraw()
 
 clock = pygame.time.Clock()
 
+
+life_bar = LifeBar(screen, maid)
 # screen_manager = ScreenManager(screen)
 #
 # initial_screen = InitialScreen()
@@ -93,6 +95,8 @@ while not done:
 
     # draw.draw(totalSprites)
 
+    life_bar.draw()
+
     key_pressed = pygame.key.get_pressed()
 
     if key_pressed[pygame.K_LEFT]:
@@ -104,11 +108,14 @@ while not done:
     elif key_pressed[pygame.K_DOWN]:
         maid.trigger_animation(FightingAnimation.DEFENSE)
     elif key_pressed[pygame.K_z]:
+        maid.life_points = maid.life_points - 10
         maid.trigger_animation(FightingAnimation.FIST)
+        maid.collision_with_char(another_maid)
     elif key_pressed[pygame.K_x]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
     elif key_pressed[pygame.K_SPACE]:
         maid.trigger_animation(MovingAnimation.JUMP)
+
     # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
     # for sp in collided_sprites:
     #   print('Collision', sp)
