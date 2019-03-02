@@ -215,9 +215,8 @@ class Character(pygame.sprite.Sprite):
             else:
                 attack_val = self.attributes.attack / 10
 
+            character.life_points -= attack_val
             print(attack_val)
-
-
 
 
 class Maid(Character):

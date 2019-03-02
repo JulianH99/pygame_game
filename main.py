@@ -1,16 +1,13 @@
 import pygame
-import os
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid, Bowsette
 from fighting_game.dynamics import LifeBar
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
-from fighting_game.dynamics import MovingAnimation, FightingAnimation, ProFightingAnimation
-from fighting_game.helpers.colors import RED
+from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
-# from fighting_game.draw import Redraw
-from fighting_game.screen import ScreenManager, InitialScreen, CharacterSelectionScreen
+
 
 ALLOWED_DISTANCE = 150
 
@@ -63,7 +60,7 @@ totalSprites = pygame.sprite.Group()
 player.add(maid)
 enemy.add(another_maid)
 
-totalSprites.add(player)
+totalSprites.add(player, enemy)
 
 # draw = Redraw()
 
@@ -71,6 +68,8 @@ clock = pygame.time.Clock()
 
 
 life_bar = LifeBar(screen, maid)
+enemy_life_bar = LifeBar(screen, another_maid, index=2)
+
 # screen_manager = ScreenManager(screen)
 #
 # initial_screen = InitialScreen()
@@ -96,25 +95,41 @@ while not done:
     # draw.draw(totalSprites)
 
     life_bar.draw()
+    enemy_life_bar.draw()
 
     key_pressed = pygame.key.get_pressed()
 
-    if key_pressed[pygame.K_LEFT]:
+    if key_pressed[pygame.K_a]:
         maid.trigger_animation(MovingAnimation.WALK)
         maid.change_direction(False)
-    elif key_pressed[pygame.K_RIGHT]:
+    elif key_pressed[pygame.K_d]:
         maid.trigger_animation(MovingAnimation.WALK)
         maid.change_direction(True)
-    elif key_pressed[pygame.K_DOWN]:
+    elif key_pressed[pygame.K_s]:
         maid.trigger_animation(FightingAnimation.DEFENSE)
-    elif key_pressed[pygame.K_z]:
-        maid.life_points = maid.life_points - 10
+    elif key_pressed[pygame.K_g]:
         maid.trigger_animation(FightingAnimation.FIST)
         maid.collision_with_char(another_maid)
-    elif key_pressed[pygame.K_x]:
+    elif key_pressed[pygame.K_h]:
         maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-    elif key_pressed[pygame.K_SPACE]:
+    elif key_pressed[pygame.K_w]:
         maid.trigger_animation(MovingAnimation.JUMP)
+
+    if key_pressed[pygame.K_LEFT]:
+        another_maid.trigger_animation(MovingAnimation.WALK)
+        another_maid.change_direction(False)
+    elif key_pressed[pygame.K_RIGHT]:
+        another_maid.trigger_animation(MovingAnimation.WALK)
+        another_maid.change_direction(True)
+    elif key_pressed[pygame.K_DOWN]:
+        another_maid.trigger_animation(FightingAnimation.DEFENSE)
+    elif key_pressed[pygame.K_k]:
+        another_maid.trigger_animation(FightingAnimation.FIST)
+        another_maid.collision_with_char(maid)
+    elif key_pressed[pygame.K_l]:
+        another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+    elif key_pressed[pygame.K_UP]:
+        another_maid.trigger_animation(MovingAnimation.JUMP)
 
     # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
     # for sp in collided_sprites:
@@ -129,9 +144,6 @@ while not done:
     screen.blit(scaled_background, (0 , 0))
 
     clock.tick(27)
-    
-    #collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
-    #for sp in collided_sprites:
-     #   print('Collision', sp)
+
 
 pygame.quit()
