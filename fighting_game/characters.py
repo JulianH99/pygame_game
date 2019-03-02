@@ -38,11 +38,7 @@ class Character(pygame.sprite.Sprite):
         # repositioning
         self.rect.centerx = x
         self.rect.centery = y
-        self.speed = 3
 
-        # jumping base variables
-        self.force = 8
-        self.mass = 2
 
         #jump variables
         self.isJump = False
@@ -61,6 +57,8 @@ class Character(pygame.sprite.Sprite):
         self.playing_animation: SpriteSheet = None
 
         self.attributes: Attributes = self.get_attributes()
+
+        self.speed = int(self.attributes.speed / 10)
 
         self.defending = False
 

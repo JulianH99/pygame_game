@@ -2,7 +2,8 @@ import pygame
 from enum import Enum
 from typing import List
 from fighting_game.helpers.image import Image
-from fighting_game.helpers.colors import BLACK, RED
+from fighting_game.helpers.colors import BLACK, GREEN, WHITE, BLUE
+from fighting_game.helpers import font
 import os
 from fighting_game.helpers.screen import SCREEN_WIDTH
 import math
@@ -143,12 +144,12 @@ class LifeBar:
         :type character: Character
         """
 
-
         self.character = character
         self.screen = screen
         self.width = math.floor((SCREEN_WIDTH / 2) - 50)
         self.inner_width = self.width - 5
         self.life_points = character.life_points
+        self.name = font.render(character.name, False, WHITE)
 
         if index == 1:
             rect_positions = (20, 20)
@@ -164,9 +165,10 @@ class LifeBar:
 
     def draw(self):
         self.calculate()
-        pygame.draw.rect(self.screen, RED, self.outer_rect)
+        pygame.draw.rect(self.screen, BLUE, self.outer_rect)
         if self.inner_width > 0:
-            pygame.draw.rect(self.screen, BLACK, self.inner_rect)
+            pygame.draw.rect(self.screen, GREEN, self.inner_rect)
+        self.screen.blit(self.name, self.inner_rect_positions)
 
     def calculate(self):
 
@@ -174,7 +176,6 @@ class LifeBar:
             self.inner_width = 0
         else:
             self.inner_width = math.floor((self.character.life_points * (self.width - 5)) / 100)
-        print("life {}, width {}, inner_width {}".format(self.character.life_points, self.width - 5, self.inner_width))
         self.inner_rect = self.build_life_bar_rect()
 
     def build_life_bar_rect(self):

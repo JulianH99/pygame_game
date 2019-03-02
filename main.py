@@ -141,7 +141,7 @@ while not done:
 
     pygame.display.flip()
 
-    screen.blit(scaled_background, (0 , 0))
+    screen.blit(scaled_background, (0, 0))
 
     clock.tick(27)
 
