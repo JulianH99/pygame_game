@@ -6,9 +6,13 @@ from fighting_game.dynamics import LifeBar
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation
-from fighting_game.character_builder import CharacterDirector, CharacterBuilder
+from fighting_game.character_builder import CharacterDirector, CharacterBuilder, PowerUpBuilder
 from fighting_game.accessories import Slopes
+
 from fighting_game.screen import ScreenManager, CharacterSelectionScreen, InitialScreen
+from fighting_game.powerups import CharacterPowerUp
+import random
+
 
 ALLOWED_DISTANCE = 150
 
@@ -21,10 +25,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
 scaled_background = Image.scale_to_window(background)
 
-# slopes = Slopes()
+slopes = Slopes()
 
 
 character_builder = CharacterBuilder(Maid)
+power_up_builder = PowerUpBuilder()
 character_director = CharacterDirector(character_builder)
 
 character_director.construct()
@@ -55,17 +60,11 @@ print(maid)
 
 done = False
 
-player = pygame.sprite.Group()
-enemy = pygame.sprite.Group()
+
 totalSprites = pygame.sprite.Group()
 accessories = pygame.sprite.Group()
 
-# accessories.add(slopes)
-
-player.add(maid)
-enemy.add(another_maid)
-
-totalSprites.add(player, enemy)
+totalSprites.add(maid, another_maid)
 
 # draw = Redraw()
 
@@ -75,8 +74,12 @@ clock = pygame.time.Clock()
 life_bar = LifeBar(screen, maid)
 enemy_life_bar = LifeBar(screen, another_maid, index=2)
 
+
+accessory_chance = 0.01
+
 screen_manager = ScreenManager(screen)
 #
+
 initial_screen = InitialScreen()
 characters_screen = CharacterSelectionScreen()
 #
@@ -90,6 +93,12 @@ def collided(sprite, other):
     """Check if the hitboxes of the two sprites collide."""
     return sprite.hitbox.colliderect(other.hitbox)
 
+
+# initial_screen = InitialScreen()
+# characters_screen = CharacterSelectionScreen()
+#
+# screen_manager.add_screen('start', initial_screen)
+# screen_manager.add_screen('characters', characters_screen)
 
 while not done:
 
@@ -140,11 +149,36 @@ while not done:
     # for sp in collided_sprites:
     #   print('Collision', sp)
     #
-    # totalSprites.update()
+    totalSprites.update()
     #
-    # totalSprites.draw(screen)
+    totalSprites.draw(screen)
 
-    screen_manager.switch('characters')
+    if random.random() < accessory_chance:
+        slopes.rect.centerx = random.randrange(10, SCREEN_WIDTH - 10)
+        accessories.add(slopes)
+
+    accessories.draw(screen)
+
+    collisions = pygame.sprite.groupcollide(totalSprites, accessories, False, False)
+
+    for collision in collisions.keys():
+
+        accessory = collisions[collision][0]
+
+        if accessory:
+
+            power_up_builder.create_instance(CharacterPowerUp, collision, accessory)
+
+            character_director.set_builder(power_up_builder)
+
+            character_director.construct()
+
+            maid = power_up_builder.character
+
+        accessories.empty()
+
+
+    # screen_manager.switch('characters')
 
     pygame.display.flip()
 

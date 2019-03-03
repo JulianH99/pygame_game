@@ -23,9 +23,7 @@ class CharacterDirector:
         self.character_builder.build_large_attack_animation()
         self.character_builder.build_pro_large_attack_animation()
         self.character_builder.build_static_animation()
-
-        "The method die is giving problems"
-        #self.character_builder.build_die_animation()
+        self.character_builder.build_die_animation()
 
     def set_builder(self, character_builder):
         """
@@ -136,7 +134,8 @@ class CharacterBuilder(AbstractCharacterBuilder):
     def __init__(self, ch_class):
         super().__init__(ch_class)
 
-        self._character: Character = ch_class()
+        if ch_class is not None:
+            self._character: Character = ch_class()
 
     def build_walk_animation(self):
         base_name = self._character.name + 'Walk'
@@ -273,7 +272,7 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         die_animation = SpriteSheet(
             base_sprite_path=os.path.join(self._character.get_sprite_path(), base_name),
-            frames=8
+            frames=6
         )
 
         die_animation.base_file_name = base_name
@@ -299,3 +298,32 @@ class CharacterBuilder(AbstractCharacterBuilder):
 
         self._character.add_sprite_sheet(MovingAnimation.STATIC.value, static_animation)
         pass
+
+
+class PowerUpBuilder(CharacterBuilder):
+
+    def __init__(self):
+        super().__init__(None)
+
+        self.power_up_class = None
+        self.dec_character = None
+        self.accessory = None
+
+    def create_instance(self, power_up_class, character, accessory):
+        """
+        Creates the instance of the power up class
+
+        :param power_up_class: power up class to be instantiated
+        :type power_up_class: CharacterPowerUp
+        :param character: character to be decorated
+        :type character: Character
+        :param accessory: accessory to decorate the character
+        :type accessory: Accessory
+
+        """
+        self.power_up_class = power_up_class
+        self.dec_character = character
+        self.accessory = accessory
+
+        self._character: Character = self.power_up_class(self.dec_character, self.accessory)
+        print("From builder {}".format(self._character))

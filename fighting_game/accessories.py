@@ -1,14 +1,24 @@
 import pygame
 from abc import abstractmethod, ABCMeta
 from fighting_game.helpers.path import Path
+from fighting_game.helpers.image import Image
 from fighting_game.dynamics import Attributes
+from fighting_game.helpers.colors import *
+from fighting_game.helpers.screen import GROUND_AREA_Y
+from fighting_game.dynamics import ProFightingAnimation, FightingAnimation
+from typing import Dict
 
 
 class Accessory(pygame.sprite.Sprite, metaclass=ABCMeta):
     def __init__(self):
-        super().__init__(self)
-        self.attributes = self.build_attributes
-        self.sprite = self.get_sprite()
+        super().__init__()
+        self.attributes = self.build_attributes()
+        self.image = self.get_sprite()
+        self.image.set_colorkey(BLACK)
+        self.power_up = self.get_power_up()
+
+        self.rect = self.image.get_rect()
+        self.rect.centery = GROUND_AREA_Y
 
     @abstractmethod
     def build_attributes(self):
@@ -28,6 +38,10 @@ class Accessory(pygame.sprite.Sprite, metaclass=ABCMeta):
         """
         pass
 
+    @abstractmethod
+    def get_power_up(self) -> Dict:
+        pass
+
     def draw(self, screen, position):
         """
         Draws the accessory to the screen
@@ -43,8 +57,11 @@ class Accessory(pygame.sprite.Sprite, metaclass=ABCMeta):
 
 class Slopes(Accessory):
 
+    def __init__(self):
+        super().__init__()
+
     def get_sprite(self):
-        return Path.path_to("accessories", "Slopes.png")
+        return Image.load(Path.path_to("accessories", "Slopes.png"))
 
     def build_attributes(self):
         return Attributes(
@@ -53,11 +70,19 @@ class Slopes(Accessory):
             attack=3
         )
 
+    def get_power_up(self) -> Dict:
+        return {
+            "replace": FightingAnimation.LARGE_ATTACK,
+            "for": ProFightingAnimation.PRO_LARGE_ATTACK
+        }
+
 
 class Toast(Accessory):
+    def __init__(self):
+        super().__init__()
 
     def get_sprite(self):
-        return Path.path_to("accessories", "Toast.png")
+        return Image.load(Path.path_to("accessories", "Toast.png"))
 
     def build_attributes(self):
         return Attributes(
@@ -66,11 +91,20 @@ class Toast(Accessory):
             attack=-3
         )
 
+    def get_power_up(self) -> Dict:
+        return {
+            "replace": FightingAnimation.DEFENSE,
+            "for": ProFightingAnimation.PRO_DEFENSE
+        }
+
 
 class TransmutationCircle(Accessory):
 
+    def __init__(self):
+        super().__init__()
+
     def get_sprite(self):
-        return Path.path_to("accessories", "TransmutationCircle.png")
+        return Image.load(Path.path_to("accessories", "TransmutationCircle.png"))
 
     def build_attributes(self):
         return Attributes(
@@ -79,3 +113,8 @@ class TransmutationCircle(Accessory):
             attack=-10
         )
 
+    def get_power_up(self) -> Dict:
+        return {
+            "replace": FightingAnimation.FIST,
+            "for": ProFightingAnimation.PRO_FIST
+        }

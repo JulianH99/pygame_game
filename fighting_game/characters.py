@@ -20,8 +20,8 @@ class Character(pygame.sprite.Sprite):
 
     card_size = (100, 150)
   
-    def __init__(self, x=0, y=0, *groups, facing_right=True):
-        super().__init__(*groups)
+    def __init__(self, x=0, y=0, facing_right=True):
+        super().__init__()
 
         self.name = None
         # Path to sprite images
@@ -38,7 +38,6 @@ class Character(pygame.sprite.Sprite):
         # repositioning
         self.rect.centerx = x
         self.rect.centery = y
-
 
         #jump variables
         self.isJump = False
@@ -116,12 +115,10 @@ class Character(pygame.sprite.Sprite):
             sprite_sheet.perform_flip()
 
     def flip(self):
-        print("flipping")
         self.__perform_flip()
         self.flipped = True
 
     def unflip(self):
-        print("unflipping")
         self.__perform_flip()
         self.flipped = False
 
@@ -145,7 +142,6 @@ class Character(pygame.sprite.Sprite):
                 self.playing_animation = self.sprite_sheets[animation.value]
 
                 if animation != FightingAnimation.DEFENSE:
-                    print("different animation")
                     self.defending = False
                 else:
                     self.defending = True
@@ -180,7 +176,7 @@ class Character(pygame.sprite.Sprite):
                     var = (self.jumpCount ** 2) * 0.5 * neg
                     self.rect.centery -= round(var)
                     self.jumpCount -= 1
-                    print(self.rect.centery)
+
                 else:
                     self.isJump = False
                     self.jumpCount = 10
@@ -214,7 +210,6 @@ class Character(pygame.sprite.Sprite):
                 attack_val = self.attributes.attack / 10
 
             character.life_points -= attack_val
-            print(attack_val)
 
 
 class Maid(Character):
