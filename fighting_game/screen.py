@@ -135,68 +135,69 @@ class CharacterSelectionScreen(Screen):
     def __paint_characters(self, screen):
         screen.fill(BLACK)
 
-        screen.blit(self.assets['characters']['bowsette'], (50, 60))
-        screen.blit(self.assets['surface'], (50, 60))
+        screen.blit(self.assets['characters']['bowsette'], (30, 30))
+        screen.blit(self.assets['surface'], (30, 30))
 
-        screen.blit(self.assets['characters']['maid'], (50, 320))
-        screen.blit(self.assets['surface'], (50, 320))
+        screen.blit(self.assets['characters']['maid'], (30, 220))
+        screen.blit(self.assets['surface'], (30, 220))
 
-        screen.blit(self.assets['characters']['miia'], (240, 60))
-        screen.blit(self.assets['surface'], (240, 60))
+        screen.blit(self.assets['characters']['miia'], (175, 30))
+        screen.blit(self.assets['surface'], (175, 30))
 
-        screen.blit(self.assets['characters']['ryuuko'], (240, 320))
-        screen.blit(self.assets['surface'], (240, 320))
+        screen.blit(self.assets['characters']['ryuuko'], (175, 220))
+        screen.blit(self.assets['surface'], (175, 220))
 
-        screen.blit(self.assets['characters']['saber'], (430, 60))
-        screen.blit(self.assets['surface'], (430, 60))
+        screen.blit(self.assets['characters']['saber'], (320, 30))
+        screen.blit(self.assets['surface'], (320, 30))
 
-        screen.blit(self.assets['characters']['sailor'], (430, 320))
-        screen.blit(self.assets['surface'], (430, 320))
+        screen.blit(self.assets['characters']['sailor'], (320, 220))
+        screen.blit(self.assets['surface'], (320, 220))
 
-        screen.blit(self.assets['characters']['sakura'], (620, 60))
-        screen.blit(self.assets['surface'], (620, 60))
+        screen.blit(self.assets['characters']['sakura'], (465, 30))
+        screen.blit(self.assets['surface'], (465, 30))
 
-        screen.blit(self.assets['characters']['virgo'], (620, 320))
-        screen.blit(self.assets['surface'], (620, 320))
+        screen.blit(self.assets['characters']['virgo'], (465, 220))
+        screen.blit(self.assets['surface'], (465, 220))
 
     def __mouse_event(self):
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
-            if 50 + 200 > mouse[0] > 50 and 60 + 150 > mouse[1] > 60:
+            if 30 + 150 > mouse[0] > 30 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Bowsette")
 
-            elif 50 + 200 > mouse[0] > 50 and 320 + 150 > mouse[1] > 320:
+            elif 30 + 150 > mouse[0] > 50 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Maid")
 
-            elif 240 + 200 > mouse[0] > 240 and 60 + 150 > mouse[1] > 60:
+            elif 175 + 150 > mouse[0] > 175 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Miia")
-            elif 240 + 200 > mouse[0] > 240 and 320 + 150 > mouse[1] > 320:
+
+            elif 175 + 150 > mouse[0] > 175 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Ryuuko")
 
-            elif 430 + 200 > mouse[0] > 430 and 60 + 150 > mouse[1] > 60:
+            elif 320 + 150 > mouse[0] > 320 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Saber")
 
-            elif 430 + 200 > mouse[0] > 430 and 320 + 150 > mouse[1] > 320:
+            elif 320 + 150 > mouse[0] > 320 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sailor")
 
-            elif 620 + 200 > mouse[0] > 620 and 60 + 150 > mouse[1] > 60:
+            elif 465 + 150 > mouse[0] > 465 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sakura")
 
-            elif 620 + 200 > mouse[0] > 620 and 320 + 150 > mouse[1] > 320:
+            elif 465 + 150 > mouse[0] > 465 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Virgo")

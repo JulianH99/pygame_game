@@ -18,7 +18,7 @@ class Character(pygame.sprite.Sprite):
     width = 64
     height = 64
 
-    card_size = (150, 300)
+    card_size = (100, 150)
   
     def __init__(self, x=0, y=0, *groups, facing_right=True):
         super().__init__(*groups)

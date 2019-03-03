@@ -27,7 +27,7 @@ clock = pygame.time.Clock()
 
 # Characters_profiles_preloads
 bowsette_load = Image.load(Path.path_to("profile", "bowsette_character.png"))
-bowsette = pygame.transform.scale(bowsette_load, (150, 200))
+bowsette = pygame.transform.scale(bowsette_load, (50, 200))
 maid_load = Image.load(Path.path_to("profile", "maid_character.png"))
 maid = pygame.transform.scale(maid_load, (150, 200))
 miia_load = Image.load(Path.path_to("profile", "miia_character.png"))
@@ -106,7 +106,7 @@ class Redraw:
     def selection_character(self):
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
-            if 50 + 200 > mouse[0] > 50 and 60 + 150 > mouse[1] > 60:
+            if 30 + 150 > mouse[0] > 30 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Bowsette")

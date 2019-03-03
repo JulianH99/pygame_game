@@ -8,7 +8,7 @@ from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.accessories import Slopes
-from fighting_game.screen import ScreenManager, CharacterSelectionScreen
+from fighting_game.screen import ScreenManager, CharacterSelectionScreen, InitialScreen
 
 ALLOWED_DISTANCE = 150
 
@@ -77,10 +77,10 @@ enemy_life_bar = LifeBar(screen, another_maid, index=2)
 
 screen_manager = ScreenManager(screen)
 #
-# initial_screen = InitialScreen()
+initial_screen = InitialScreen()
 characters_screen = CharacterSelectionScreen()
 #
-# screen_manager.add_screen('start', initial_screen)
+screen_manager.add_screen('start', initial_screen)
 screen_manager.add_screen('characters', characters_screen)
 
 
