@@ -7,7 +7,8 @@ from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_ARE
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
-
+from fighting_game.accessories import Slopes
+from fighting_game.screen import ScreenManager, CharacterSelectionScreen
 
 ALLOWED_DISTANCE = 150
 
@@ -19,6 +20,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
 scaled_background = Image.scale_to_window(background)
+
+# slopes = Slopes()
 
 
 character_builder = CharacterBuilder(Maid)
@@ -51,11 +54,13 @@ bowsette.set_x_y((400, GROUND_AREA_Y))
 print(maid)
 
 done = False
-isJump = False
 
 player = pygame.sprite.Group()
 enemy = pygame.sprite.Group()
 totalSprites = pygame.sprite.Group()
+accessories = pygame.sprite.Group()
+
+# accessories.add(slopes)
 
 player.add(maid)
 enemy.add(another_maid)
@@ -70,13 +75,13 @@ clock = pygame.time.Clock()
 life_bar = LifeBar(screen, maid)
 enemy_life_bar = LifeBar(screen, another_maid, index=2)
 
-# screen_manager = ScreenManager(screen)
+screen_manager = ScreenManager(screen)
 #
 # initial_screen = InitialScreen()
-# characters_screen = CharacterSelectionScreen()
+characters_screen = CharacterSelectionScreen()
 #
 # screen_manager.add_screen('start', initial_screen)
-# screen_manager.add_screen('characters', characters_screen)
+screen_manager.add_screen('characters', characters_screen)
 
 
 # This callback function is passed as the `collided`argument
@@ -134,10 +139,12 @@ while not done:
     # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
     # for sp in collided_sprites:
     #   print('Collision', sp)
+    #
+    # totalSprites.update()
+    #
+    # totalSprites.draw(screen)
 
-    totalSprites.update()
-
-    totalSprites.draw(screen)
+    screen_manager.switch('characters')
 
     pygame.display.flip()
 
