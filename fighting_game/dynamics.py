@@ -4,6 +4,7 @@ from typing import List
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.colors import BLACK, GREEN, WHITE, BLUE
 from fighting_game.helpers import font
+from abc import ABC, abstractmethod
 import os
 from fighting_game.helpers.screen import SCREEN_WIDTH
 import math
@@ -181,3 +182,34 @@ class LifeBar:
     def build_life_bar_rect(self):
         return pygame.Rect(self.inner_rect_positions[0], self.inner_rect_positions[1],
                            self.inner_width, 20)
+
+
+class ScreenSwitcherSubject(ABC):
+    @abstractmethod
+    def on_switch(self, screen_key: str):
+        pass
+
+
+class ScreenSwitcher:
+    """
+    Mediator class to communicate the screens with the screen manager
+    """
+
+    __instance = None
+
+    def __init__(self):
+        self.observers: List[ScreenSwitcherSubject] = []
+
+    def attach(self, observer: ScreenSwitcherSubject):
+        self.observers.append(observer)
+
+    def switch(self, screen_key: str):
+        for observer in self.observers:
+            observer.on_switch(screen_key)
+
+    @classmethod
+    def get_instance(cls):
+        if cls.__instance is None:
+            cls.__instance = ScreenSwitcher()
+        return cls.__instance
+

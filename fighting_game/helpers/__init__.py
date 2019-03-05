@@ -15,23 +15,12 @@ class HelpersFacade:
 
     :version: 1
     """
+    image = Image
 
-    @staticmethod
-    def image():
-        return Image
+    colors = colors
 
-    @staticmethod
-    def colors():
-        return colors
+    path = Path
 
-    @staticmethod
-    def path():
-        return Path
+    screen = screen
 
-    @staticmethod
-    def screen():
-        return screen
-
-    @staticmethod
-    def font():
-        return font
+    font = font

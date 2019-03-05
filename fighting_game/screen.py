@@ -1,9 +1,7 @@
-import pygame
 from abc import ABC, abstractmethod
-from fighting_game.helpers.image import Image
-from fighting_game.helpers.path import Path
-from fighting_game.helpers.colors import BLACK, RED, BRIGHT_RED
+from fighting_game.helpers.colors import RED, BRIGHT_RED
 from fighting_game.characters import *
+from fighting_game.dynamics import ScreenSwitcher
 
 
 class Screen(ABC):
@@ -17,13 +15,14 @@ class Screen(ABC):
 
         self._load_assets()
         self._render(screen)
+        self._handle_event(screen)
 
     @abstractmethod
     def _load_assets(self):
         pass
 
     @abstractmethod
-    def _update(self, screen):
+    def _handle_event(self, screen):
         pass
 
     @abstractmethod
@@ -36,9 +35,6 @@ class ScreenManager:
     def __init__(self, screen):
         self.screens = {}
         self.screen = screen
-
-    def start(self, screen_key: str):
-        self.switch(screen_key)
 
     def switch(self, key: str):
         try:
@@ -66,13 +62,15 @@ class InitialScreen(Screen):
 
         self.assets['button_text'] = game_start
 
-    def _update(self, screen):
-        pass
+    def _handle_event(self, screen):
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
     def _render(self, screen):
-
+        pygame.init()
         mouse = pygame.mouse.get_pos()
-
+        print("rendering but not rendering")
         screen.blit(self.assets['background'], (0, 0))
 
         if 500 > mouse[0] > 300 > mouse[1] > 250:
@@ -83,9 +81,10 @@ class InitialScreen(Screen):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.first_menu = False
+
+                        ScreenSwitcher.get_instance().switch('characters')
         else:
             pygame.draw.rect(screen, BRIGHT_RED, (300, 250, 200, 50))
-
         screen.blit(self.assets['button_text'], (300, 250))
 
 
@@ -124,42 +123,7 @@ class CharacterSelectionScreen(Screen):
         
         self.assets['surface'] = transparent_surface
 
-
-    def _update(self, screen):
-        pass
-
-    def _render(self, screen):
-        self.__paint_characters(screen)
-        self.__mouse_event()
-
-    def __paint_characters(self, screen):
-        screen.fill(BLACK)
-
-        screen.blit(self.assets['characters']['bowsette'], (30, 30))
-        screen.blit(self.assets['surface'], (30, 30))
-
-        screen.blit(self.assets['characters']['maid'], (30, 220))
-        screen.blit(self.assets['surface'], (30, 220))
-
-        screen.blit(self.assets['characters']['miia'], (175, 30))
-        screen.blit(self.assets['surface'], (175, 30))
-
-        screen.blit(self.assets['characters']['ryuuko'], (175, 220))
-        screen.blit(self.assets['surface'], (175, 220))
-
-        screen.blit(self.assets['characters']['saber'], (320, 30))
-        screen.blit(self.assets['surface'], (320, 30))
-
-        screen.blit(self.assets['characters']['sailor'], (320, 220))
-        screen.blit(self.assets['surface'], (320, 220))
-
-        screen.blit(self.assets['characters']['sakura'], (465, 30))
-        screen.blit(self.assets['surface'], (465, 30))
-
-        screen.blit(self.assets['characters']['virgo'], (465, 220))
-        screen.blit(self.assets['surface'], (465, 220))
-
-    def __mouse_event(self):
+    def _handle_event(self, screen):
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if 30 + 150 > mouse[0] > 30 and 30 + 100 > mouse[1] > 30:
@@ -202,18 +166,50 @@ class CharacterSelectionScreen(Screen):
                     if event.button == 1:
                         print("Selected Virgo")
 
-            elif event == pygame.QUIT:
+            elif event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+
+    def _render(self, screen):
+        pygame.init()
+        self.__paint_characters(screen)
+
+    def __paint_characters(self, screen):
+        screen.fill(BLACK)
+
+        screen.blit(self.assets['characters']['bowsette'], (30, 30))
+        screen.blit(self.assets['surface'], (30, 30))
+
+        screen.blit(self.assets['characters']['maid'], (30, 220))
+        screen.blit(self.assets['surface'], (30, 220))
+
+        screen.blit(self.assets['characters']['miia'], (175, 30))
+        screen.blit(self.assets['surface'], (175, 30))
+
+        screen.blit(self.assets['characters']['ryuuko'], (175, 220))
+        screen.blit(self.assets['surface'], (175, 220))
+
+        screen.blit(self.assets['characters']['saber'], (320, 30))
+        screen.blit(self.assets['surface'], (320, 30))
+
+        screen.blit(self.assets['characters']['sailor'], (320, 220))
+        screen.blit(self.assets['surface'], (320, 220))
+
+        screen.blit(self.assets['characters']['sakura'], (465, 30))
+        screen.blit(self.assets['surface'], (465, 30))
+
+        screen.blit(self.assets['characters']['virgo'], (465, 220))
+        screen.blit(self.assets['surface'], (465, 220))
 
 
 class FightingScreen(Screen):
 
     def _load_assets(self):
-        pass
+        background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
+        self.assets['background'] = Image.scale_to_window(background)
 
-    def _update(self, screen):
+    def _handle_event(self, screen):
         pass
 
     def _render(self, screen):
-        pass
+        pygame.init()
+        screen.blit(self.assets['background'], (0, 0))

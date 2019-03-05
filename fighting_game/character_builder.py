@@ -5,15 +5,18 @@ from fighting_game.dynamics import SpriteSheet, MovingAnimation, FightingAnimati
 
 
 class CharacterDirector:
-    def __init__(self, character_builder):
+    def __init__(self):
         """
         Initializes the CharacterDirector to use a specific CharacterBuilder
         :param character_builder: The character builder to use in construction process
         :type character_builder: AbstractCharacterBuilder
         """
-        self.character_builder = character_builder
+        self.character_builder = None
 
     def construct(self):
+        if self.character_builder is None:
+            raise ValueError('character builder cannot be none')
+
         self.character_builder.build_walk_animation()
         self.character_builder.build_jump_animation()
         self.character_builder.build_defense_animation()
