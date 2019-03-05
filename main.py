@@ -1,4 +1,6 @@
 import pygame
+
+from fighting_game.draw import Redraw
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
 from fighting_game.characters import Maid, Bowsette
@@ -82,7 +84,7 @@ characters_screen = CharacterSelectionScreen()
 #
 screen_manager.add_screen('start', initial_screen)
 screen_manager.add_screen('characters', characters_screen)
-
+isJump = False
 
 # This callback function is passed as the `collided`argument
 # to pygame.sprite.spritecollide or groupcollide.
@@ -103,7 +105,8 @@ while not done:
     enemy_life_bar.draw()
 
     key_pressed = pygame.key.get_pressed()
-
+    if key_pressed[pygame.K_ESCAPE]:
+        pygame.quit()
     if key_pressed[pygame.K_a]:
         maid.trigger_animation(MovingAnimation.WALK)
         maid.change_direction(False)
@@ -134,17 +137,21 @@ while not done:
     elif key_pressed[pygame.K_l]:
         another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
     elif key_pressed[pygame.K_UP]:
-        another_maid.trigger_animation(MovingAnimation.JUMP)
+        isJump = True
+
+    print(isJump)
+    if isJump:
+        isJump = another_maid.trigger_animation(MovingAnimation.JUMP)
 
     # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
     # for sp in collided_sprites:
     #   print('Collision', sp)
     #
-    # totalSprites.update()
+    totalSprites.update()
     #
-    # totalSprites.draw(screen)
+    totalSprites.draw(screen)
 
-    screen_manager.switch('characters')
+    # screen_manager.switch('characters')
 
     pygame.display.flip()
 

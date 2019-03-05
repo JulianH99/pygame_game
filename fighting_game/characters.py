@@ -41,8 +41,7 @@ class Character(pygame.sprite.Sprite):
 
 
         #jump variables
-        self.isJump = False
-        self.jumpCount = 10
+        self.jumpCount = 9
 
         self.sprite_sheets: Dict[str, SpriteSheet] = {}
 
@@ -156,8 +155,7 @@ class Character(pygame.sprite.Sprite):
                     else:
                         self.trigger_right()
                 elif animation == MovingAnimation.JUMP:
-                    self.isJump = True
-                    self.trigger_jump()
+                    return self.trigger_jump()
             except KeyError:
                 print("The requested animation {} does not exists".format(animation.value))
         else:
@@ -172,18 +170,17 @@ class Character(pygame.sprite.Sprite):
             self.rect.centerx += self.speed
 
     def trigger_jump(self):
-        while self.isJump:
-                if self.jumpCount >= -10:
-                    neg = 1
-                    if self.jumpCount < 0:
-                        neg = -1
-                    var = (self.jumpCount ** 2) * 0.5 * neg
-                    self.rect.centery -= round(var)
-                    self.jumpCount -= 1
-                    print(self.rect.centery)
-                else:
-                    self.isJump = False
-                    self.jumpCount = 10
+            if self.jumpCount >= -9:
+                neg = 1
+                if self.jumpCount < 0:
+                    neg = -1
+                var = (self.jumpCount ** 2) * 0.5 * neg
+                self.rect.centery -= round(var)
+                self.jumpCount -= 1
+                return True
+            else:
+                self.jumpCount = 9
+                return False
 
     def update(self, *args):
 
