@@ -1,9 +1,7 @@
 import pygame
-
 from fighting_game.factories import ScreenManagerFactory
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
-from fighting_game.characters import Maid, Bowsette
 from fighting_game.dynamics import LifeBar
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
