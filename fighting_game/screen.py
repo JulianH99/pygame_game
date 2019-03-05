@@ -75,18 +75,18 @@ class InitialScreen(Screen):
 
         screen.blit(self.assets['background'], (0, 0))
 
-        if 500 > mouse[0] > 300 > mouse[1] > 250:
+        if 500 > mouse[0] > 200 > mouse[1] > 150:
 
-            pygame.draw.rect(screen, RED, (300, 250, 200, 50))
+            pygame.draw.rect(screen, RED, (200, 150, 200, 50))
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.first_menu = False
         else:
-            pygame.draw.rect(screen, BRIGHT_RED, (300, 250, 200, 50))
+            pygame.draw.rect(screen, BRIGHT_RED, (200, 150, 200, 50))
 
-        screen.blit(self.assets['button_text'], (300, 250))
+        screen.blit(self.assets['button_text'], (200, 150))
 
 
 class CharacterSelectionScreen(Screen):
@@ -101,10 +101,6 @@ class CharacterSelectionScreen(Screen):
         sakura = Character.get_card_image('sakura')
         virgo = Character.get_card_image('virgo')
 
-        background_character = Image.load(Path.path_to("backgrounds", "BackgroundNeoTokyo.png"))
-
-        scaled_background = Image.scale_to_window(background_character)
-
         self.assets['characters'] = {
             'maid': maid,
             'bowsette': bowsette,
@@ -116,21 +112,19 @@ class CharacterSelectionScreen(Screen):
             'virgo': virgo
         }
 
-        self.assets['background'] = scaled_background
 
         transparent_surface = pygame.Surface(Character.card_size)  # the size of your rect
         transparent_surface.set_alpha(0)  # alpha level
         transparent_surface.fill(WHITE)
-        
-        self.assets['surface'] = transparent_surface
 
+        self.assets['surface'] = transparent_surface
 
     def _update(self, screen):
         pass
 
     def _render(self, screen):
         self.__paint_characters(screen)
-        self.__mouse_event()
+        self.mouse_event()
 
     def __paint_characters(self, screen):
         screen.fill(BLACK)
@@ -159,53 +153,55 @@ class CharacterSelectionScreen(Screen):
         screen.blit(self.assets['characters']['virgo'], (465, 220))
         screen.blit(self.assets['surface'], (465, 220))
 
-    def __mouse_event(self):
+    def mouse_event(self):
+        selection=""
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if 30 + 150 > mouse[0] > 30 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Bowsette")
-
+                        selection = "Bowsette"
             elif 30 + 150 > mouse[0] > 50 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Maid")
-
+                        selection = "Maid"
             elif 175 + 150 > mouse[0] > 175 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Miia")
-
+                        selection = "Miia"
             elif 175 + 150 > mouse[0] > 175 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Ryuuko")
-
+                        selection = "Ryuuko"
             elif 320 + 150 > mouse[0] > 320 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Saber")
-
+                        selection = "Saber"
             elif 320 + 150 > mouse[0] > 320 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sailor")
-
+                        selection = "Sailor"
             elif 465 + 150 > mouse[0] > 465 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sakura")
-
+                        selection = "Sakura"
             elif 465 + 150 > mouse[0] > 465 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Virgo")
-
-            elif event == pygame.QUIT:
+                        selection = "Virgo"
+            if event == pygame.QUIT:
                 pygame.quit()
                 quit()
 
+        return selection
 
 class FightingScreen(Screen):
 

@@ -1,14 +1,13 @@
 import pygame
 from fighting_game.helpers.image import Image
 from fighting_game.helpers.path import Path
-from fighting_game.characters import Maid, Bowsette
 from fighting_game.dynamics import LifeBar
 from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
 from fighting_game.characters import Maid
 from fighting_game.dynamics import MovingAnimation, FightingAnimation
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.accessories import Slopes
-from fighting_game.screen import ScreenManager, CharacterSelectionScreen, InitialScreen
+from fighting_game.screen import ScreenManager, CharacterSelectionScreen, InitialScreen, FightingScreen
 
 ALLOWED_DISTANCE = 150
 
@@ -23,6 +22,26 @@ scaled_background = Image.scale_to_window(background)
 
 # slopes = Slopes()
 
+
+# Screen Managament
+
+screen_manager = ScreenManager(screen)
+
+initial_screen = InitialScreen()
+characters_screen = CharacterSelectionScreen()
+fighting_screen = FightingScreen()
+
+#
+
+screen_manager.add_screen('start', initial_screen)
+screen_manager.add_screen('characters', characters_screen)
+screen_manager.add_screen('fighting', fighting_screen)
+
+# Player Creation
+
+def selection_character():
+    selection = characters_screen.mouse_event()
+    print("A"+selection)
 
 character_builder = CharacterBuilder(Maid)
 character_director = CharacterDirector(character_builder)
@@ -42,30 +61,21 @@ another_maid = character_builder.character
 maid.set_x_y((100, GROUND_AREA_Y))
 another_maid.set_x_y((400, GROUND_AREA_Y))
 
-character_builder.change_class(Bowsette)
-character_director.set_builder(character_builder)
-
-character_director.construct()
-
-bowsette = character_builder.character
-
-bowsette.set_x_y((400, GROUND_AREA_Y))
-
 print(maid)
 
 done = False
 
 player = pygame.sprite.Group()
-enemy = pygame.sprite.Group()
+player_two = pygame.sprite.Group()
 totalSprites = pygame.sprite.Group()
 accessories = pygame.sprite.Group()
 
 # accessories.add(slopes)
 
 player.add(maid)
-enemy.add(another_maid)
+player_two.add(another_maid)
 
-totalSprites.add(player, enemy)
+totalSprites.add(player, player_two)
 
 # draw = Redraw()
 
@@ -73,15 +83,7 @@ clock = pygame.time.Clock()
 
 
 life_bar = LifeBar(screen, maid)
-enemy_life_bar = LifeBar(screen, another_maid, index=2)
-
-screen_manager = ScreenManager(screen)
-#
-initial_screen = InitialScreen()
-characters_screen = CharacterSelectionScreen()
-#
-screen_manager.add_screen('start', initial_screen)
-screen_manager.add_screen('characters', characters_screen)
+player_two_life_bar = LifeBar(screen, another_maid, index=2)
 
 
 # This callback function is passed as the `collided`argument
@@ -100,7 +102,7 @@ while not done:
     # draw.draw(totalSprites)
 
     life_bar.draw()
-    enemy_life_bar.draw()
+    player_two_life_bar.draw()
 
     key_pressed = pygame.key.get_pressed()
 
@@ -136,7 +138,7 @@ while not done:
     elif key_pressed[pygame.K_UP]:
         another_maid.trigger_animation(MovingAnimation.JUMP)
 
-    # collided_sprites = pygame.sprite.spritecollide(player, enemy, False, collided)
+    # collided_sprites = pygame.sprite.spritecollide(player, player_two, False, collided)
     # for sp in collided_sprites:
     #   print('Collision', sp)
     #
@@ -144,7 +146,8 @@ while not done:
     #
     # totalSprites.draw(screen)
 
-    screen_manager.switch('characters')
+    screen_manager.switch('start')
+    # selection_character()
 
     pygame.display.flip()
 
