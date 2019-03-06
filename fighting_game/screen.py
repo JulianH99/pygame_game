@@ -14,7 +14,7 @@ class Screen(ABC):
     def __init__(self):
         self.screen_name = ''
         self.assets = {}
-        self.Players = []
+        self.players = []
 
         self._load_assets()
 
@@ -87,6 +87,7 @@ class InitialScreen(Screen):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        print("Menu oculto")
                         # self.first_menu = False
 
                         ScreenSwitcher.get_instance().switch('characters')
@@ -135,16 +136,9 @@ class CharacterSelectionScreen(Screen):
     def _render(self, screen):
         self.__paint_characters(screen)
         self.mouse_event()
-        # self.selection()
 
     def selection(self):
-        #player1 = Player()
-        #player2 = Player()
-        #print("A")
-        selection = self.mouse_event()
-        # Player.setPlayer(selection)
         ScreenSwitcher.get_instance().switch('fight')
-        Player.getPlayer()
 
     def __paint_characters(self, screen):
         screen.fill(BLACK)
@@ -181,73 +175,71 @@ class CharacterSelectionScreen(Screen):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Bowsette")
-                        selection = "Bowsette"
+                        selection = Bowsette
                         self.manage_selection(selection)
 
             elif 30 + 150 > mouse[0] > 50 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Maid")
-                        selection = "Maid"
+                        selection = Maid
                         self.manage_selection(selection)
 
             elif 175 + 150 > mouse[0] > 175 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Miia")
-                        selection = "Miia"
+                        selection = Miia
                         self.manage_selection(selection)
 
             elif 175 + 150 > mouse[0] > 175 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Ryuuko")
-                        selection = "Ryuuko"
+                        selection = Ryyuko
                         self.manage_selection(selection)
 
             elif 320 + 150 > mouse[0] > 320 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Saber")
-                        selection = "Saber"
+                        selection = Saber
                         self.manage_selection(selection)
 
             elif 320 + 150 > mouse[0] > 320 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sailor")
-                        selection = "Sailor"
+                        selection = Sailor
                         self.manage_selection(selection)
 
             elif 465 + 150 > mouse[0] > 465 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sakura")
-                        selection = "Sakura"
+                        selection = Sakura
                         self.manage_selection(selection)
 
             elif 465 + 150 > mouse[0] > 465 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Virgo")
-                        selection = "Virgo"
+                        selection = Virgo
                         self.manage_selection(selection)
 
-    def manage_selection(self,selection):
+    def manage_selection(self, selection):
         player = Player()
         use_player = UsePlayer()
 
-
-        self.selection = selection
         player.setPlayer(selection)
 
-        if len(self.Players)<2:
-            self.Players.append(player)
-            print(len(self.Players))
+        if len(self.players) < 2:
+            self.players.append(player)
+            print(len(self.players))
             player.getPlayer()
         else:
-            use_player.setPlayer1(self.Players[0])
-            use_player.setPlayer2(self.Players[1])
+            use_player.setPlayer1(self.players[0])
+            use_player.setPlayer2(self.players[1])
             ScreenSwitcher.get_instance().switch('fight')
 
         return selection
@@ -265,74 +257,79 @@ class FightingScreen(Screen):
         self.assets['accessory_group'] = pygame.sprite.Group()
 
         total_sprites = pygame.sprite.Group()
-        maid = CharacterFactory.get_character(Maid)
 
         # another_maid = character_builder.character
-        life_bar = LifeBar(maid)
-        # enemy_life_bar = LifeBar(screen, another_maid)
-        total_sprites.add(maid)
-
-        maid.set_x_y((10, HelpersFacade.screen.GROUND_AREA_Y))
 
         self.assets['sprites'] = total_sprites
-        self.assets['player_1'] = maid
-        self.assets['player_1_life'] = life_bar
+        self.assets['player_1'] = None
+        self.assets['player_2'] = None
+        self.assets['player_1_life'] = None
+        self.assets['player_2_life'] = None
 
     def _handle_event(self, screen):
         pass
 
     def _render(self, screen):
         pygame.init()
-        screen.blit(self.assets['background'], (0, 0))
-        maid = self.assets['player_1']
 
-        sprites = self.assets['sprites']
+        self._load_characters()
 
-        life_bar = self.assets['player_1_life']
+        # screen.blit(self.assets['background'], (0, 0))
+        # maid = self.assets['player_1']
+        #
+        # sprites = self.assets['sprites']
+        #
+        # life_bar = self.assets['player_1_life']
+        #
+        # key_pressed = pygame.key.get_pressed()
+        #
+        # if key_pressed[pygame.K_a]:
+        #     maid.trigger_animation(MovingAnimation.WALK)
+        #     maid.change_direction(False)
+        # if key_pressed[pygame.K_d]:
+        #     maid.trigger_animation(MovingAnimation.WALK)
+        #     maid.change_direction(True)
+        # if key_pressed[pygame.K_s]:
+        #     maid.trigger_animation(FightingAnimation.DEFENSE)
+        # if key_pressed[pygame.K_g]:
+        #     maid.trigger_animation(FightingAnimation.FIST)
+        #     # maid.collision_with_char(another_maid)
+        # if key_pressed[pygame.K_h]:
+        #     maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+        # if key_pressed[pygame.K_w]:
+        #     self.is_jump = True
+        #
+        # if self.is_jump:
+        #     self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
+        #
+        # # if key_pressed[pygame.K_LEFT]:
+        # #     another_maid.trigger_animation(MovingAnimation.WALK)
+        # #     another_maid.change_direction(False)
+        # # elif key_pressed[pygame.K_RIGHT]:
+        # #     another_maid.trigger_animation(MovingAnimation.WALK)
+        # #     another_maid.change_direction(True)
+        # # elif key_pressed[pygame.K_DOWN]:
+        # #     another_maid.trigger_animation(FightingAnimation.DEFENSE)
+        # # elif key_pressed[pygame.K_k]:
+        # #     another_maid.trigger_animation(FightingAnimation.FIST)
+        # #     another_maid.collision_with_char(maid)
+        # # elif key_pressed[pygame.K_l]:
+        # #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+        # # elif key_pressed[pygame.K_UP]:
+        # #     another_maid.trigger_animation(MovingAnimation.JUMP)
+        # sprites.update()
+        # sprites.draw(screen)
+        #
+        # life_bar.draw(screen)
+        #
+        # self.assets['player_1'] = maid
+        # self.assets['player_1_life'] = life_bar
 
-        key_pressed = pygame.key.get_pressed()
+    def _load_characters(self):
+        if self.assets['player_1'] is None and self.assets['player_2'] is None:
+            use_player = UsePlayer()
 
-        if key_pressed[pygame.K_a]:
-            maid.trigger_animation(MovingAnimation.WALK)
-            maid.change_direction(False)
-        if key_pressed[pygame.K_d]:
-            maid.trigger_animation(MovingAnimation.WALK)
-            maid.change_direction(True) 
-        if key_pressed[pygame.K_s]:
-            maid.trigger_animation(FightingAnimation.DEFENSE)
-        if key_pressed[pygame.K_g]:
-            maid.trigger_animation(FightingAnimation.FIST)
-            # maid.collision_with_char(another_maid)
-        if key_pressed[pygame.K_h]:
-            maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        if key_pressed[pygame.K_w]:
-            self.is_jump = True
-
-        if self.is_jump:
-            self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
-
-        # if key_pressed[pygame.K_LEFT]:
-        #     another_maid.trigger_animation(MovingAnimation.WALK)
-        #     another_maid.change_direction(False)
-        # elif key_pressed[pygame.K_RIGHT]:
-        #     another_maid.trigger_animation(MovingAnimation.WALK)
-        #     another_maid.change_direction(True)
-        # elif key_pressed[pygame.K_DOWN]:
-        #     another_maid.trigger_animation(FightingAnimation.DEFENSE)
-        # elif key_pressed[pygame.K_k]:
-        #     another_maid.trigger_animation(FightingAnimation.FIST)
-        #     another_maid.collision_with_char(maid)
-        # elif key_pressed[pygame.K_l]:
-        #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        # elif key_pressed[pygame.K_UP]:
-        #     another_maid.trigger_animation(MovingAnimation.JUMP)
-        sprites.update()
-        sprites.draw(screen)
-
-        life_bar.draw(screen)
-
-        self.assets['player_1'] = maid
-        self.assets['player_1_life'] = life_bar
+            print(use_player.player2, use_player.player1)
 
 
 class ScreenManagerFactory:
