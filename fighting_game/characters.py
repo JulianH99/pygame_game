@@ -366,3 +366,6 @@ class Virgo(Character):
             attack=70,
             defense=30
         )
+
+
+

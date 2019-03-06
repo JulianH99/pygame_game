@@ -1,18 +1,8 @@
 import pygame
-from fighting_game.factories import ScreenManagerFactory
-from fighting_game.helpers.image import Image
-from fighting_game.helpers.path import Path
-from fighting_game.dynamics import LifeBar
-from fighting_game.helpers.screen import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_AREA_Y
-from fighting_game.characters import Maid
-from fighting_game.dynamics import MovingAnimation, FightingAnimation, ScreenSwitcher
-from fighting_game.character_builder import CharacterDirector, CharacterBuilder, PowerUpBuilder
-from fighting_game.accessories import Slopes
-from fighting_game.game import Game
-from fighting_game.screen import ScreenManager, CharacterSelectionScreen, InitialScreen, FightingScreen
-from fighting_game.powerups import CharacterPowerUp
-import random
 
+from fighting_game.dynamics import ScreenSwitcher
+from fighting_game.game import Game
+from fighting_game.screen import CharacterSelectionScreen, InitialScreen, FightingScreen, ScreenManagerFactory
 
 screen_switcher = ScreenSwitcher.get_instance()
 

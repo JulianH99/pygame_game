@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
+from fighting_game.accessories import AccessoryFlyweight, Accessories
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
 from fighting_game.characters import *
 from fighting_game.dynamics import ScreenSwitcher, LifeBar
+from fighting_game.character_factory import CharacterFactory
 
 
 class Screen(ABC):
@@ -213,15 +215,13 @@ class FightingScreen(Screen):
         background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
         self.assets['background'] = Image.scale_to_window(background)
 
+        self.assets['accessory_fl'] = AccessoryFlyweight()
+
+        self.assets['accessory_group'] = pygame.sprite.Group()
+
         total_sprites = pygame.sprite.Group()
-        character_builder = CharacterBuilder(Maid)
-        character_director = CharacterDirector()
-        character_director.set_builder(character_builder)
+        maid = CharacterFactory.get_character(Maid)
 
-        character_director.construct()
-        maid = character_builder.character
-
-        print(maid)
         # another_maid = character_builder.character
         life_bar = LifeBar(maid)
         # enemy_life_bar = LifeBar(screen, another_maid)
@@ -288,3 +288,15 @@ class FightingScreen(Screen):
 
         self.assets['player_1'] = maid
         self.assets['player_1_life'] = life_bar
+
+
+class ScreenManagerFactory:
+
+    @staticmethod
+    def get_screen_manager(screen, screens: Dict[str, Screen]):
+        screen_manager = ScreenManager(screen)
+
+        for screen in screens.keys():
+            screen_manager.add_screen(screen, screens[screen])
+
+        return screen_manager
