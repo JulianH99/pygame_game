@@ -66,7 +66,7 @@ class Character(pygame.sprite.Sprite):
         self.animation_step = 0
         self.current_index = 0
         # Creation of the Hitbox
-        self.hitbox = (self.x + 20, self.y, 28, 60)
+        self.dead = False
 
     @abstractmethod
     def get_attributes(self):
@@ -181,8 +181,11 @@ class Character(pygame.sprite.Sprite):
 
     def update(self, *args):
 
-        if self.playing_animation:
+        if self.life_points <= 0:
+            self.playing_animation = self.sprite_sheets[FightingAnimation.DIE.value]
+            self.dead = True
 
+        if self.playing_animation:
             if self.current_index < len(self.playing_animation.images):
                 self.image = self.playing_animation.images[self.current_index]
                 self.current_index += 1
@@ -199,7 +202,7 @@ class Character(pygame.sprite.Sprite):
         """
         collision = pygame.sprite.collide_rect(self, character)
 
-        if collision:
+        if collision and character.life_points >= 0:
             if character.defending:
                 sub_val = (character.attributes.defense * self.attributes.attack) / 100
                 attack_val = self.attributes.attack - sub_val
@@ -208,6 +211,7 @@ class Character(pygame.sprite.Sprite):
                 attack_val = self.attributes.attack / 10
 
             character.life_points -= attack_val
+            print(character.life_points)
 
 
 class Maid(Character):

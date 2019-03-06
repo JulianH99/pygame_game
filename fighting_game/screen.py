@@ -74,10 +74,7 @@ class InitialScreen(Screen):
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
-        key = pygame.key.get_pressed()
 
-        if key == pygame.K_SPACE:
-            ScreenSwitcher.get_instance().switch('characters')
 
     def _render(self, screen):
         pygame.init()
@@ -97,6 +94,12 @@ class InitialScreen(Screen):
                         ScreenSwitcher.get_instance().switch('characters')
         else:
             pygame.draw.rect(screen, BRIGHT_RED, (200, 150, 200, 50))
+
+        key = pygame.key.get_pressed()
+
+        if key == pygame.K_SPACE:
+            print("Space")
+            ScreenSwitcher.get_instance().switch('characters')
 
         screen.blit(self.assets['button_text'], (200, 150))
 
@@ -236,16 +239,16 @@ class CharacterSelectionScreen(Screen):
         use_player = UsePlayer()
         player.set_player(selection)
 
-        if len(self.players) < 2:
+        if len(self.players) <= 1:
             self.players.append(player)
             print(len(self.players))
             player.get_player()
-        else:
+
+        if len(self.players) == 2:
+            print("should switch")
             use_player.set_player_1(self.players[0])
             use_player.set_player_2(self.players[1])
             ScreenSwitcher.get_instance().switch('fight')
-
-        return selection
 
 
 class FightingScreen(Screen):
@@ -325,14 +328,19 @@ class FightingScreen(Screen):
             player_2.collision_with_char(player_1)
         elif key_pressed[pygame.K_UP]:
             player_2.trigger_animation(MovingAnimation.JUMP)
+
+        if player_2.dead:
+            sprites.remove(player_2)
+
+        if player_1.dead:
+            sprites.remove(player_1)
+
         sprites.update()
         sprites.draw(screen)
 
         life_bar.draw(screen)
         
         life_bar_2.draw(screen)
-        self.assets['player_1'] = player_1
-        self.assets['player_1_life'] = life_bar
 
     def _load_characters(self):
         if self.assets['player_1'] is None and self.assets['player_2'] is None:
