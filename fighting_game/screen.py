@@ -135,16 +135,6 @@ class CharacterSelectionScreen(Screen):
     def _render(self, screen):
         self.__paint_characters(screen)
         self.mouse_event()
-        # self.selection()
-
-    def selection(self):
-        #player1 = Player()
-        #player2 = Player()
-        #print("A")
-        selection = self.mouse_event()
-        # Player.setPlayer(selection)
-        ScreenSwitcher.get_instance().switch('fight')
-        Player.getPlayer()
 
     def __paint_characters(self, screen):
         screen.fill(BLACK)
@@ -236,9 +226,6 @@ class CharacterSelectionScreen(Screen):
     def manage_selection(self,selection):
         player = Player()
         use_player = UsePlayer()
-
-
-        self.selection = selection
         player.setPlayer(selection)
 
         if len(self.Players)<2:

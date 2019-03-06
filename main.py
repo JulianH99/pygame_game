@@ -24,8 +24,9 @@ screen_manager = ScreenManagerFactory.get_screen_manager(game.screen, {
 game.set_screen_manager(screen_manager)
 
 
-game.on_switch('fight')
+game.on_switch('characters')
 done = True
+
 while not done:
 
     # for event in pygame.event.get():
@@ -70,8 +71,7 @@ while not done:
     #     accessories.empty()
     #
 
-    screen_manager.switch('fighting_screen')
-
+    screen_manager.switch('initial')
     pygame.display.flip()
 
     # screen.blit(scaled_background, (0, 0))
