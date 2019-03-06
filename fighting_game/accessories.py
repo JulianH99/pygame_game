@@ -7,9 +7,11 @@ from fighting_game.helpers.colors import *
 from fighting_game.helpers.screen import GROUND_AREA_Y
 from fighting_game.dynamics import ProFightingAnimation, FightingAnimation
 from typing import Dict
-
+import enum
 
 class Accessory(pygame.sprite.Sprite, metaclass=ABCMeta):
+
+
     def __init__(self):
         super().__init__()
         self.attributes = self.build_attributes()
@@ -41,6 +43,10 @@ class Accessory(pygame.sprite.Sprite, metaclass=ABCMeta):
     @abstractmethod
     def get_power_up(self) -> Dict:
         pass
+
+
+    def set_x(self, x: int):
+        self.rect.centerx = x
 
     def draw(self, screen, position):
         """
@@ -118,3 +124,33 @@ class TransmutationCircle(Accessory):
             "replace": FightingAnimation.FIST,
             "for": ProFightingAnimation.PRO_FIST
         }
+
+
+class Accessories(enum.Enum):
+    slopes = Slopes
+    toast = Toast
+    transmutation_circle = TransmutationCircle
+
+
+class AccessoryFactory:
+
+    @staticmethod
+    def get_accessory(accessory_name: Accessories):
+        return accessory_name.value()
+
+
+class AccessoryFlyweight:
+
+    def __init__(self):
+        self.accessories = {}
+
+    def get_accessory(self, accessory_name: Accessories):
+        try:
+            return self.accessories[accessory_name]
+        except KeyError:
+            accessory = AccessoryFactory.get_accessory(accessory_name)
+
+            self.accessories[accessory_name] = accessory
+
+            return accessory
+
