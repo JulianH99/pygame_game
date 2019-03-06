@@ -340,25 +340,24 @@ class FightingScreen(Screen):
         if key_pressed[pygame.K_LEFT]:
             player_2.trigger_animation(MovingAnimation.WALK)
             player_2.change_direction(False)
-        elif key_pressed[pygame.K_RIGHT]:
+        if key_pressed[pygame.K_RIGHT]:
             player_2.trigger_animation(MovingAnimation.WALK)
             player_2.change_direction(True)
-        elif key_pressed[pygame.K_DOWN]:
+        if key_pressed[pygame.K_DOWN]:
             player_2.trigger_animation(FightingAnimation.DEFENSE)
-        elif key_pressed[pygame.K_k]:
+        if key_pressed[pygame.K_k]:
             player_2.trigger_animation(FightingAnimation.FIST)
             player_2.collision_with_char(player_1)
-        elif key_pressed[pygame.K_l]:
+        if key_pressed[pygame.K_l]:
             player_2.trigger_animation(FightingAnimation.LARGE_ATTACK)
             player_2.collision_with_char(player_1)
-        elif key_pressed[pygame.K_UP]:
+        if key_pressed[pygame.K_UP]:
             player_2.trigger_animation(MovingAnimation.JUMP)
             self.is_jump_player_2 = True
-
         if self.is_jump_player_2:
             self.is_jump_player_2 = player_2.trigger_animation(MovingAnimation.JUMP)
 
-         if player_2.dead:
+        if player_2.dead:
             sprites.remove(player_2)
 
         if player_1.dead:
