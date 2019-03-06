@@ -70,7 +70,6 @@ class InitialScreen(Screen):
     def _render(self, screen):
         pygame.init()
         mouse = pygame.mouse.get_pos()
-        print("rendering but not rendering")
         screen.blit(self.assets['background'], (0, 0))
 
         if 500 > mouse[0] > 200 > mouse[1] > 150:
@@ -112,11 +111,10 @@ class CharacterSelectionScreen(Screen):
             'virgo': virgo
         }
 
-
         transparent_surface = pygame.Surface(Character.card_size)  # the size of your rect
         transparent_surface.set_alpha(0)  # alpha level
         transparent_surface.fill(WHITE)
-         self.assets['surface'] = transparent_surface
+        self.assets['surface'] = transparent_surface
 
     def _handle_event(self, screen):
         pass
@@ -156,7 +154,7 @@ class CharacterSelectionScreen(Screen):
         screen.blit(self.assets['surface'], (465, 220))
 
     def mouse_event(self):
-        selection=""
+        selection = ""
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if 30 + 150 > mouse[0] > 30 and 30 + 100 > mouse[1] > 30:
@@ -202,38 +200,8 @@ class CharacterSelectionScreen(Screen):
             if event == pygame.QUIT:
                 pygame.quit()
 
-    def _render(self, screen):
-        pygame.init()
-        self.__paint_characters(screen)
-
-    def __paint_characters(self, screen):
-        screen.fill(BLACK)
-
-        screen.blit(self.assets['characters']['bowsette'], (30, 30))
-        screen.blit(self.assets['surface'], (30, 30))
-
-        screen.blit(self.assets['characters']['maid'], (30, 220))
-        screen.blit(self.assets['surface'], (30, 220))
-
-        screen.blit(self.assets['characters']['miia'], (175, 30))
-        screen.blit(self.assets['surface'], (175, 30))
-
-        screen.blit(self.assets['characters']['ryuuko'], (175, 220))
-        screen.blit(self.assets['surface'], (175, 220))
-
-        screen.blit(self.assets['characters']['saber'], (320, 30))
-        screen.blit(self.assets['surface'], (320, 30))
-
-        screen.blit(self.assets['characters']['sailor'], (320, 220))
-        screen.blit(self.assets['surface'], (320, 220))
-
-        screen.blit(self.assets['characters']['sakura'], (465, 30))
-        screen.blit(self.assets['surface'], (465, 30))
-
-        screen.blit(self.assets['characters']['virgo'], (465, 220))
-        screen.blit(self.assets['surface'], (465, 220))
-
         return selection
+
 
 class FightingScreen(Screen):
 

@@ -192,7 +192,7 @@ class ScreenSwitcherSubject(ABC):
 
 class ScreenSwitcher:
     """
-    Mediator class to communicate the screens with the screen manager
+    Subject class to communicate the screens with the screen manager
     """
 
     __instance = None
@@ -212,4 +212,5 @@ class ScreenSwitcher:
         if cls.__instance is None:
             cls.__instance = ScreenSwitcher()
         return cls.__instance
+
 
