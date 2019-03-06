@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 from fighting_game.helpers.colors import RED, BRIGHT_RED
 from fighting_game.characters import *
-from fighting_game.dynamics import ScreenSwitcher
-
-
+from fighting_game.dynamics import ScreenSwitcher, Player, UsePlayer
 class Screen(ABC):
     def __init__(self):
         self.screen_name = ''
         self.assets = {}
+        self.Players = []
 
     def draw(self, screen):
         if screen is None:
@@ -70,7 +69,6 @@ class InitialScreen(Screen):
     def _render(self, screen):
         pygame.init()
         mouse = pygame.mouse.get_pos()
-        print("rendering but not rendering")
         screen.blit(self.assets['background'], (0, 0))
 
         if 500 > mouse[0] > 200 > mouse[1] > 150:
@@ -80,7 +78,7 @@ class InitialScreen(Screen):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.first_menu = False
+                        # self.first_menu = False
 
                         ScreenSwitcher.get_instance().switch('characters')
         else:
@@ -116,10 +114,12 @@ class CharacterSelectionScreen(Screen):
         transparent_surface = pygame.Surface(Character.card_size)  # the size of your rect
         transparent_surface.set_alpha(0)  # alpha level
         transparent_surface.fill(WHITE)
-         self.assets['surface'] = transparent_surface
+        self.assets['surface'] = transparent_surface
 
     def _handle_event(self, screen):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
     def _update(self, screen):
         pass
@@ -127,6 +127,16 @@ class CharacterSelectionScreen(Screen):
     def _render(self, screen):
         self.__paint_characters(screen)
         self.mouse_event()
+        # self.selection()
+
+    def selection(self):
+        #player1 = Player()
+        #player2 = Player()
+        #print("A")
+        selection = self.mouse_event()
+        # Player.setPlayer(selection)
+        ScreenSwitcher.get_instance().switch('fight')
+        Player.getPlayer()
 
     def __paint_characters(self, screen):
         screen.fill(BLACK)
@@ -164,76 +174,74 @@ class CharacterSelectionScreen(Screen):
                     if event.button == 1:
                         print("Selected Bowsette")
                         selection = "Bowsette"
+                        self.manage_selection(selection)
+
             elif 30 + 150 > mouse[0] > 50 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Maid")
                         selection = "Maid"
+                        self.manage_selection(selection)
+
             elif 175 + 150 > mouse[0] > 175 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Miia")
                         selection = "Miia"
+                        self.manage_selection(selection)
+
             elif 175 + 150 > mouse[0] > 175 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Ryuuko")
                         selection = "Ryuuko"
+                        self.manage_selection(selection)
+
             elif 320 + 150 > mouse[0] > 320 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Saber")
                         selection = "Saber"
+                        self.manage_selection(selection)
+
             elif 320 + 150 > mouse[0] > 320 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sailor")
                         selection = "Sailor"
+                        self.manage_selection(selection)
+
             elif 465 + 150 > mouse[0] > 465 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sakura")
                         selection = "Sakura"
+                        self.manage_selection(selection)
+
             elif 465 + 150 > mouse[0] > 465 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Virgo")
                         selection = "Virgo"
-            if event == pygame.QUIT:
-                pygame.quit()
+                        self.manage_selection(selection)
 
-    def _render(self, screen):
-        pygame.init()
-        self.__paint_characters(screen)
+    def manage_selection(self,selection):
+        player = Player()
+        use_player = UsePlayer()
 
-    def __paint_characters(self, screen):
-        screen.fill(BLACK)
 
-        screen.blit(self.assets['characters']['bowsette'], (30, 30))
-        screen.blit(self.assets['surface'], (30, 30))
+        self.selection = selection
+        player.setPlayer(selection)
 
-        screen.blit(self.assets['characters']['maid'], (30, 220))
-        screen.blit(self.assets['surface'], (30, 220))
+        if len(self.Players)<2:
+            self.Players.append(player)
+            print(len(self.Players))
+            player.getPlayer()
+        else:
+            use_player.setPlayer1(self.Players[0])
+            use_player.setPlayer2(self.Players[1])
+            ScreenSwitcher.get_instance().switch('fight')
 
-        screen.blit(self.assets['characters']['miia'], (175, 30))
-        screen.blit(self.assets['surface'], (175, 30))
-
-        screen.blit(self.assets['characters']['ryuuko'], (175, 220))
-        screen.blit(self.assets['surface'], (175, 220))
-
-        screen.blit(self.assets['characters']['saber'], (320, 30))
-        screen.blit(self.assets['surface'], (320, 30))
-
-        screen.blit(self.assets['characters']['sailor'], (320, 220))
-        screen.blit(self.assets['surface'], (320, 220))
-
-        screen.blit(self.assets['characters']['sakura'], (465, 30))
-        screen.blit(self.assets['surface'], (465, 30))
-
-        screen.blit(self.assets['characters']['virgo'], (465, 220))
-        screen.blit(self.assets['surface'], (465, 220))
-
-        return selection
 
 class FightingScreen(Screen):
 
