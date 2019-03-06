@@ -211,3 +211,43 @@ class ScreenSwitcher:
         return cls.__instance
 
 
+class Player:
+
+    def __init__(self):
+        self.player = None
+
+    def set_player(self, player):
+        self.player = player
+
+    def get_player(self):
+        print(self.player)
+        return self.player
+
+
+class UsePlayer:
+    player1 = None
+    player2 = None
+
+    class __UsePlayer:
+        def __init__(self):
+            self.player1 = None
+            self.player2 = None
+
+        def set_player_1(self, player1):
+            self.player1 = player1
+
+        def set_player_2(self, player2):
+            self.player2 = player2
+    instance = None
+
+    def __new__(self):
+
+        if self.instance is None:
+            UsePlayer.instance = UsePlayer.__UsePlayer()
+        return UsePlayer.instance
+
+    def set_player_1(self, player1):
+        self.instance.player1 = player1
+
+    def set_player_2(self, player2):
+        self.instance.player2 = player2

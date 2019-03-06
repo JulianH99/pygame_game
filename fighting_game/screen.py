@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import random
 from abc import ABC, abstractmethod
 
@@ -5,15 +6,24 @@ from fighting_game.accessories import *
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
-from fighting_game.characters import *
-from fighting_game.dynamics import ScreenSwitcher, LifeBar
+=======
+from abc import ABC
+
+from fighting_game.accessories import AccessoryFlyweight
 from fighting_game.character_factory import CharacterFactory
+>>>>>>> 6c44b7112ca2701bcc8c8c7abd2dc617e7464c02
+from fighting_game.characters import *
+from fighting_game.dynamics import Player, UsePlayer
+from fighting_game.dynamics import ScreenSwitcher, LifeBar
+from fighting_game.helpers import HelpersFacade
+from fighting_game.helpers.colors import RED, BRIGHT_RED
 
 
 class Screen(ABC):
     def __init__(self):
         self.screen_name = ''
         self.assets = {}
+        self.players = []
 
         self._load_assets()
 
@@ -74,6 +84,11 @@ class InitialScreen(Screen):
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
+        key = pygame.key.get_pressed()
+
+        if key == pygame.K_SPACE:
+            ScreenSwitcher.get_instance().switch('characters')
+
     def _render(self, screen):
         pygame.init()
         mouse = pygame.mouse.get_pos()
@@ -86,7 +101,8 @@ class InitialScreen(Screen):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.first_menu = False
+                        print("Menu oculto")
+                        # self.first_menu = False
 
                         ScreenSwitcher.get_instance().switch('characters')
         else:
@@ -124,7 +140,9 @@ class CharacterSelectionScreen(Screen):
         self.assets['surface'] = transparent_surface
 
     def _handle_event(self, screen):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
     def _update(self, screen):
         pass
@@ -132,6 +150,9 @@ class CharacterSelectionScreen(Screen):
     def _render(self, screen):
         self.__paint_characters(screen)
         self.mouse_event()
+
+    def selection(self):
+        ScreenSwitcher.get_instance().switch('fight')
 
     def __paint_characters(self, screen):
         screen.fill(BLACK)
@@ -168,44 +189,71 @@ class CharacterSelectionScreen(Screen):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Bowsette")
-                        selection = "Bowsette"
+                        selection = Bowsette
+                        self.manage_selection(selection)
+
             elif 30 + 150 > mouse[0] > 50 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Maid")
-                        selection = "Maid"
+                        selection = Maid
+                        self.manage_selection(selection)
+
             elif 175 + 150 > mouse[0] > 175 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Miia")
-                        selection = "Miia"
+                        selection = Miia
+                        self.manage_selection(selection)
+
             elif 175 + 150 > mouse[0] > 175 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Ryuuko")
-                        selection = "Ryuuko"
+                        selection = Ryyuko
+                        self.manage_selection(selection)
+
             elif 320 + 150 > mouse[0] > 320 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Saber")
-                        selection = "Saber"
+                        selection = Saber
+                        self.manage_selection(selection)
+
             elif 320 + 150 > mouse[0] > 320 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sailor")
-                        selection = "Sailor"
+                        selection = Sailor
+                        self.manage_selection(selection)
+
             elif 465 + 150 > mouse[0] > 465 and 30 + 100 > mouse[1] > 30:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Sakura")
-                        selection = "Sakura"
+                        selection = Sakura
+                        self.manage_selection(selection)
+
             elif 465 + 150 > mouse[0] > 465 and 220 + 100 > mouse[1] > 220:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print("Selected Virgo")
-                        selection = "Virgo"
-            if event == pygame.QUIT:
-                pygame.quit()
+                        selection = Virgo
+                        self.manage_selection(selection)
+
+    def manage_selection(self, selection):
+        player = Player()
+        use_player = UsePlayer()
+        player.set_player(selection)
+
+        if len(self.players) < 2:
+            self.players.append(player)
+            print(len(self.players))
+            player.get_player()
+        else:
+            use_player.set_player_1(self.players[0])
+            use_player.set_player_2(self.players[1])
+            ScreenSwitcher.get_instance().switch('fight')
 
         return selection
 
@@ -221,28 +269,32 @@ class FightingScreen(Screen):
 
         self.assets['accessory_group'] = pygame.sprite.Group()
         total_sprites = pygame.sprite.Group()
-        maid = CharacterFactory.get_character(Maid)
 
-        # another_maid = character_builder.character
-        life_bar = LifeBar(maid)
-        # enemy_life_bar = LifeBar(screen, another_maid)
-        total_sprites.add(maid)
-
-        maid.set_x_y((10, HelpersFacade.screen.GROUND_AREA_Y))
+        # player_2 = character_builder.character
 
         self.assets['sprites'] = total_sprites
-        self.assets['player_1'] = maid
-        self.assets['player_1_life'] = life_bar
+        self.assets['player_1'] = None
+        self.assets['player_2'] = None
+        self.assets['player_1_life'] = None
+        self.assets['player_2_life'] = None
 
     def _handle_event(self, screen):
         pass
 
     def _render(self, screen):
-        maid = self.assets['player_1']
+        pygame.init()
+
+        self._load_characters()
+
+        screen.blit(self.assets['background'], (0, 0))
+        player_1 = self.assets['player_1']
+        player_2 = self.assets['player_2']
 
         sprites = self.assets['sprites']
 
         life_bar = self.assets['player_1_life']
+        
+        life_bar_2 = self.assets['player_2_life']
 
         accessory = any
         type = random.randint(1, 600)
@@ -264,22 +316,24 @@ class FightingScreen(Screen):
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[pygame.K_a]:
-            maid.trigger_animation(MovingAnimation.WALK)
-            maid.change_direction(False)
+            player_1.trigger_animation(MovingAnimation.WALK)
+            player_1.change_direction(False)
         if key_pressed[pygame.K_d]:
-            maid.trigger_animation(MovingAnimation.WALK)
-            maid.change_direction(True) 
+            player_1.trigger_animation(MovingAnimation.WALK)
+            player_1.change_direction(True)
         if key_pressed[pygame.K_s]:
-            maid.trigger_animation(FightingAnimation.DEFENSE)
+            player_1.trigger_animation(FightingAnimation.DEFENSE)
         if key_pressed[pygame.K_g]:
-            maid.trigger_animation(FightingAnimation.FIST)
-            # maid.collision_with_char(another_maid)
+            player_1.trigger_animation(FightingAnimation.FIST)
+            player_1.collision_with_char(player_2)
         if key_pressed[pygame.K_h]:
-            maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
+            player_1.trigger_animation(FightingAnimation.LARGE_ATTACK)
+            player_1.collision_with_char(player_2)
         if key_pressed[pygame.K_w]:
             self.is_jump = True
 
         if self.is_jump:
+<<<<<<< HEAD
             self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
 
         # if key_pressed[pygame.K_LEFT]:
@@ -299,13 +353,51 @@ class FightingScreen(Screen):
         #     another_maid.trigger_animation(MovingAnimation.JUMP)
         # self.assets['accessory_group'].update()
         self.assets['accessory_group'].draw(screen)
+            self.is_jump = player_1.trigger_animation(MovingAnimation.JUMP)
+
+        if key_pressed[pygame.K_LEFT]:
+            player_2.trigger_animation(MovingAnimation.WALK)
+            player_2.change_direction(False)
+        elif key_pressed[pygame.K_RIGHT]:
+            player_2.trigger_animation(MovingAnimation.WALK)
+            player_2.change_direction(True)
+        elif key_pressed[pygame.K_DOWN]:
+            player_2.trigger_animation(FightingAnimation.DEFENSE)
+        elif key_pressed[pygame.K_k]:
+            player_2.trigger_animation(FightingAnimation.FIST)
+            player_2.collision_with_char(player_1)
+        elif key_pressed[pygame.K_l]:
+            player_2.trigger_animation(FightingAnimation.LARGE_ATTACK)
+            player_2.collision_with_char(player_1)
+        elif key_pressed[pygame.K_UP]:
+            player_2.trigger_animation(MovingAnimation.JUMP)
         sprites.update()
         sprites.draw(screen)
 
         life_bar.draw(screen)
-
-        self.assets['player_1'] = maid
+        
+        life_bar_2.draw(screen)
+        self.assets['player_1'] = player_1
         self.assets['player_1_life'] = life_bar
+
+    def _load_characters(self):
+        if self.assets['player_1'] is None and self.assets['player_2'] is None:
+            use_player = UsePlayer()
+
+            player_1 = CharacterFactory.get_character(use_player.player1.player)
+            player_2 = CharacterFactory.get_character(use_player.player2.player)
+
+            player_1.set_x_y((10, HelpersFacade.screen.GROUND_AREA_Y))
+            player_2.set_x_y((HelpersFacade.screen.SCREEN_WIDTH - 10, HelpersFacade.screen.GROUND_AREA_Y))
+
+            self.assets['player_1'] = player_1
+            self.assets['player_2'] = player_2
+
+            self.assets['player_1_life'] = LifeBar(player_1)
+            self.assets['player_2_life'] = LifeBar(player_2, index=2)
+
+            self.assets['sprites'].add(player_1)
+            self.assets['sprites'].add(player_2)
 
 
 class ScreenManagerFactory:
