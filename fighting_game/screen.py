@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
+from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
 from fighting_game.characters import *
 from fighting_game.dynamics import ScreenSwitcher, LifeBar
@@ -11,11 +12,12 @@ class Screen(ABC):
         self.screen_name = ''
         self.assets = {}
 
+        self._load_assets()
+
     def draw(self, screen):
         if screen is None:
             raise ValueError('screen cannot be None')
 
-        self._load_assets()
         self._render(screen)
         self._handle_event(screen)
 
@@ -211,25 +213,37 @@ class FightingScreen(Screen):
         background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
         self.assets['background'] = Image.scale_to_window(background)
 
-    def _handle_event(self, screen):
-        pass
-
-    def _render(self, screen):
-        totalSprites = pygame.sprite.Group()
+        total_sprites = pygame.sprite.Group()
         character_builder = CharacterBuilder(Maid)
         character_director = CharacterDirector()
         character_director.set_builder(character_builder)
 
         character_director.construct()
         maid = character_builder.character
-        # another_maid = character_builder.character
-        life_bar = LifeBar(screen, maid)
-        # enemy_life_bar = LifeBar(screen, another_maid)
-        totalSprites.add(maid)
-        pygame.init()
 
-        life_bar.draw()
-        # enemy_life_bar.draw()
+        print(maid)
+        # another_maid = character_builder.character
+        life_bar = LifeBar(maid)
+        # enemy_life_bar = LifeBar(screen, another_maid)
+        total_sprites.add(maid)
+
+        maid.set_x_y((10, HelpersFacade.screen.GROUND_AREA_Y))
+
+        self.assets['sprites'] = total_sprites
+        self.assets['player_1'] = maid
+        self.assets['player_1_life'] = life_bar
+
+    def _handle_event(self, screen):
+        pass
+
+    def _render(self, screen):
+
+        maid = self.assets['player_1']
+
+        sprites = self.assets['sprites']
+
+        life_bar = self.assets['player_1_life']
+
         screen.blit(self.assets['background'], (0, 0))
         key_pressed = pygame.key.get_pressed()
 
@@ -249,6 +263,9 @@ class FightingScreen(Screen):
         elif key_pressed[pygame.K_w]:
             maid.trigger_animation(MovingAnimation.JUMP)
 
+        print(maid.rect.centerx)
+
+
         # if key_pressed[pygame.K_LEFT]:
         #     another_maid.trigger_animation(MovingAnimation.WALK)
         #     another_maid.change_direction(False)
@@ -264,6 +281,10 @@ class FightingScreen(Screen):
         #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
         # elif key_pressed[pygame.K_UP]:
         #     another_maid.trigger_animation(MovingAnimation.JUMP)
-        maid.update()
-        totalSprites.update()
-        totalSprites.draw(screen)
+        sprites.update()
+        sprites.draw(screen)
+
+        life_bar.draw(screen)
+
+        self.assets['player_1'] = maid
+        self.assets['player_1_life'] = life_bar

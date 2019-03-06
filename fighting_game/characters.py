@@ -23,6 +23,7 @@ class Character(pygame.sprite.Sprite):
     def __init__(self, x=0, y=0, facing_right=True):
         super().__init__()
 
+        print("Init character")
         self.name = None
         # Path to sprite images
         self.path = self.get_sprite_path()

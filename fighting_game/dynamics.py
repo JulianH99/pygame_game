@@ -136,17 +136,14 @@ class AIWrapper:
 
 
 class LifeBar:
-    def __init__(self, screen, character, index=1):
+    def __init__(self, character, index=1):
         """
         Initializes the life bar
-        :param screen: pygame Screen surface
-        :type screen: Surface
         :param character: Character that will be used to display the life bar
         :type character: Character
         """
 
         self.character = character
-        self.screen = screen
         self.width = math.floor((SCREEN_WIDTH / 2) - 50)
         self.inner_width = self.width - 5
         self.life_points = character.life_points
@@ -164,12 +161,12 @@ class LifeBar:
         self.outer_rect = pygame.Rect(rect_positions[0], rect_positions[1], self.width + 5, 30)
         self.inner_rect = self.build_life_bar_rect()
 
-    def draw(self):
+    def draw(self, screen):
         self.calculate()
-        pygame.draw.rect(self.screen, BLUE, self.outer_rect)
+        pygame.draw.rect(screen, BLUE, self.outer_rect)
         if self.inner_width > 0:
-            pygame.draw.rect(self.screen, GREEN, self.inner_rect)
-        self.screen.blit(self.name, self.inner_rect_positions)
+            pygame.draw.rect(screen, GREEN, self.inner_rect)
+        screen.blit(self.name, self.inner_rect_positions)
 
     def calculate(self):
 
