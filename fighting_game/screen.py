@@ -250,24 +250,21 @@ class FightingScreen(Screen):
         if key_pressed[pygame.K_a]:
             maid.trigger_animation(MovingAnimation.WALK)
             maid.change_direction(False)
-        elif key_pressed[pygame.K_d]:
+        if key_pressed[pygame.K_d]:
             maid.trigger_animation(MovingAnimation.WALK)
-            maid.change_direction(True)
-        elif key_pressed[pygame.K_s]:
+            maid.change_direction(True) 
+        if key_pressed[pygame.K_s]:
             maid.trigger_animation(FightingAnimation.DEFENSE)
-        elif key_pressed[pygame.K_g]:
+        if key_pressed[pygame.K_g]:
             maid.trigger_animation(FightingAnimation.FIST)
             # maid.collision_with_char(another_maid)
-        elif key_pressed[pygame.K_h]:
+        if key_pressed[pygame.K_h]:
             maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        elif key_pressed[pygame.K_w]:
+        if key_pressed[pygame.K_w]:
             self.is_jump = True
 
         if self.is_jump:
             self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
-
-        print(maid.rect.centerx)
-
 
         # if key_pressed[pygame.K_LEFT]:
         #     another_maid.trigger_animation(MovingAnimation.WALK)
