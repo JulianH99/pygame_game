@@ -230,7 +230,6 @@ class CharacterSelectionScreen(Screen):
     def manage_selection(self, selection):
         player = Player()
         use_player = UsePlayer()
-
         player.setPlayer(selection)
 
         if len(self.players) < 2:

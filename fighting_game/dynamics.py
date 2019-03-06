@@ -243,7 +243,9 @@ class UsePlayer:
     instance = None
 
     def __new__(self):
-        UsePlayer.instance = UsePlayer.__UsePlayer()
+
+        if self.instance is None:
+            UsePlayer.instance = UsePlayer.__UsePlayer()
         return UsePlayer.instance
 
     def setPlayer1(self,player1):
