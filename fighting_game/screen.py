@@ -208,6 +208,7 @@ class CharacterSelectionScreen(Screen):
 
 
 class FightingScreen(Screen):
+    is_jump = False
 
     def _load_assets(self):
         background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
@@ -237,7 +238,6 @@ class FightingScreen(Screen):
         pass
 
     def _render(self, screen):
-
         maid = self.assets['player_1']
 
         sprites = self.assets['sprites']
@@ -261,7 +261,10 @@ class FightingScreen(Screen):
         elif key_pressed[pygame.K_h]:
             maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
         elif key_pressed[pygame.K_w]:
-            maid.trigger_animation(MovingAnimation.JUMP)
+            self.is_jump = True
+
+        if self.is_jump:
+            self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
 
         print(maid.rect.centerx)
 
