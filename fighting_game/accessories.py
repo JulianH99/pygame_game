@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from abc import abstractmethod, ABCMeta
 from fighting_game.helpers.path import Path
@@ -94,7 +96,7 @@ class Toast(Accessory):
         return Attributes(
             speed=5,
             defense=10,
-            attack=-3
+            attack=3
         )
 
     def get_power_up(self) -> Dict:
@@ -116,7 +118,7 @@ class TransmutationCircle(Accessory):
         return Attributes(
             speed=10,
             defense=10,
-            attack=-10
+            attack=10
         )
 
     def get_power_up(self) -> Dict:
@@ -153,4 +155,3 @@ class AccessoryFlyweight:
             self.accessories[accessory_name] = accessory
 
             return accessory
-

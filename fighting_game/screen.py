@@ -1,5 +1,11 @@
-from abc import ABC
+import random
+from abc import ABC, abstractmethod
 
+from fighting_game.accessories import *
+from fighting_game.character_builder import CharacterDirector, CharacterBuilder
+from fighting_game.helpers import HelpersFacade
+from fighting_game.helpers.colors import RED, BRIGHT_RED
+from abc import ABC
 from fighting_game.accessories import AccessoryFlyweight
 from fighting_game.character_factory import CharacterFactory
 from fighting_game.characters import *
@@ -252,7 +258,8 @@ class CharacterSelectionScreen(Screen):
 
 
 class FightingScreen(Screen):
-    is_jump = False
+    is_jump_player_1 = False
+    is_jump_player_2 = False
 
     def _load_assets(self):
         background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
@@ -261,7 +268,6 @@ class FightingScreen(Screen):
         self.assets['accessory_fl'] = AccessoryFlyweight()
 
         self.assets['accessory_group'] = pygame.sprite.Group()
-
         total_sprites = pygame.sprite.Group()
 
         # player_2 = character_builder.character
@@ -290,6 +296,23 @@ class FightingScreen(Screen):
         
         life_bar_2 = self.assets['player_2_life']
 
+        accessory = any
+        type = random.randint(1, 600)
+        position = random.randint(1, HelpersFacade.screen.SCREEN_WIDTH)
+        if type == 200:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.slopes)
+            print('1')
+        elif type == 400:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.toast)
+            print("2")
+        elif type == 590:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.transmutation_circle)
+            print('3')
+        if accessory != any:
+            accessory.set_x(position)
+            self.assets['accessory_group'].add(accessory)
+        screen.blit(self.assets['background'], (0, 0))
+
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[pygame.K_a]:
@@ -307,10 +330,12 @@ class FightingScreen(Screen):
             player_1.trigger_animation(FightingAnimation.LARGE_ATTACK)
             player_1.collision_with_char(player_2)
         if key_pressed[pygame.K_w]:
-            self.is_jump = True
+            self.is_jump_player_1 = True
 
-        if self.is_jump:
-            self.is_jump = player_1.trigger_animation(MovingAnimation.JUMP)
+        if self.is_jump_player_1:
+            self.is_jump_player_1 = player_1.trigger_animation(MovingAnimation.JUMP)
+
+        self.assets['accessory_group'].draw(screen)
 
         if key_pressed[pygame.K_LEFT]:
             player_2.trigger_animation(MovingAnimation.WALK)
@@ -328,13 +353,17 @@ class FightingScreen(Screen):
             player_2.collision_with_char(player_1)
         elif key_pressed[pygame.K_UP]:
             player_2.trigger_animation(MovingAnimation.JUMP)
+            self.is_jump_player_2 = True
 
-        if player_2.dead:
+        if self.is_jump_player_2:
+            self.is_jump_player_2 = player_2.trigger_animation(MovingAnimation.JUMP)
+
+         if player_2.dead:
             sprites.remove(player_2)
 
         if player_1.dead:
             sprites.remove(player_1)
-
+            
         sprites.update()
         sprites.draw(screen)
 
