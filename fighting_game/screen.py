@@ -1,6 +1,7 @@
+import random
 from abc import ABC, abstractmethod
 
-from fighting_game.accessories import AccessoryFlyweight, Accessories
+from fighting_game.accessories import *
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
@@ -219,7 +220,6 @@ class FightingScreen(Screen):
         self.assets['accessory_fl'] = AccessoryFlyweight()
 
         self.assets['accessory_group'] = pygame.sprite.Group()
-
         total_sprites = pygame.sprite.Group()
         maid = CharacterFactory.get_character(Maid)
 
@@ -244,7 +244,23 @@ class FightingScreen(Screen):
 
         life_bar = self.assets['player_1_life']
 
+        accessory = any
+        type = random.randint(1, 600)
+        position = random.randint(1, HelpersFacade.screen.SCREEN_WIDTH)
+        if type == 200:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.slopes)
+            print('1')
+        elif type == 400:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.toast)
+            print("2")
+        elif type == 590:
+            accessory = self.assets['accessory_fl'].get_accessory(Accessories.transmutation_circle)
+            print('3')
+        if accessory != any:
+            accessory.set_x(position)
+            self.assets['accessory_group'].add(accessory)
         screen.blit(self.assets['background'], (0, 0))
+
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[pygame.K_a]:
@@ -281,6 +297,8 @@ class FightingScreen(Screen):
         #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
         # elif key_pressed[pygame.K_UP]:
         #     another_maid.trigger_animation(MovingAnimation.JUMP)
+        # self.assets['accessory_group'].update()
+        self.assets['accessory_group'].draw(screen)
         sprites.update()
         sprites.draw(screen)
 

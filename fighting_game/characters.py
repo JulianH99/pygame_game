@@ -41,7 +41,7 @@ class Character(pygame.sprite.Sprite):
         self.rect.centery = y
 
         #jump variables
-        self.jumpCount = 9
+        self.jumpCount = 6
 
         self.sprite_sheets: Dict[str, SpriteSheet] = {}
 
@@ -167,7 +167,7 @@ class Character(pygame.sprite.Sprite):
             self.rect.centerx += self.speed
 
     def trigger_jump(self):
-            if self.jumpCount >= -9:
+            if self.jumpCount >= -6:
                 neg = 1
                 if self.jumpCount < 0:
                     neg = -1
@@ -176,7 +176,7 @@ class Character(pygame.sprite.Sprite):
                 self.jumpCount -= 1
                 return True
             else:
-                self.jumpCount = 9
+                self.jumpCount = 6
                 return False
 
     def update(self, *args):
