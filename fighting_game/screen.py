@@ -1,13 +1,12 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
-from fighting_game.accessories import AccessoryFlyweight, Accessories
-from fighting_game.character_builder import CharacterDirector, CharacterBuilder
+from fighting_game.accessories import AccessoryFlyweight
+from fighting_game.character_factory import CharacterFactory
+from fighting_game.characters import *
+from fighting_game.dynamics import Player, UsePlayer
+from fighting_game.dynamics import ScreenSwitcher, LifeBar
 from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
-from fighting_game.characters import *
-from fighting_game.dynamics import ScreenSwitcher, Player, UsePlayer
-from fighting_game.dynamics import ScreenSwitcher, LifeBar
-from fighting_game.character_factory import CharacterFactory
 
 
 class Screen(ABC):
@@ -74,6 +73,11 @@ class InitialScreen(Screen):
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+
+        key = pygame.key.get_pressed()
+
+        if key == pygame.K_SPACE:
+            ScreenSwitcher.get_instance().switch('characters')
 
     def _render(self, screen):
         pygame.init()
@@ -230,15 +234,15 @@ class CharacterSelectionScreen(Screen):
     def manage_selection(self, selection):
         player = Player()
         use_player = UsePlayer()
-        player.setPlayer(selection)
+        player.set_player(selection)
 
         if len(self.players) < 2:
             self.players.append(player)
             print(len(self.players))
-            player.getPlayer()
+            player.get_player()
         else:
-            use_player.setPlayer1(self.players[0])
-            use_player.setPlayer2(self.players[1])
+            use_player.set_player_1(self.players[0])
+            use_player.set_player_2(self.players[1])
             ScreenSwitcher.get_instance().switch('fight')
 
         return selection
@@ -257,7 +261,7 @@ class FightingScreen(Screen):
 
         total_sprites = pygame.sprite.Group()
 
-        # another_maid = character_builder.character
+        # player_2 = character_builder.character
 
         self.assets['sprites'] = total_sprites
         self.assets['player_1'] = None
@@ -273,62 +277,81 @@ class FightingScreen(Screen):
 
         self._load_characters()
 
-        # screen.blit(self.assets['background'], (0, 0))
-        # maid = self.assets['player_1']
-        #
-        # sprites = self.assets['sprites']
-        #
-        # life_bar = self.assets['player_1_life']
-        #
-        # key_pressed = pygame.key.get_pressed()
-        #
-        # if key_pressed[pygame.K_a]:
-        #     maid.trigger_animation(MovingAnimation.WALK)
-        #     maid.change_direction(False)
-        # if key_pressed[pygame.K_d]:
-        #     maid.trigger_animation(MovingAnimation.WALK)
-        #     maid.change_direction(True)
-        # if key_pressed[pygame.K_s]:
-        #     maid.trigger_animation(FightingAnimation.DEFENSE)
-        # if key_pressed[pygame.K_g]:
-        #     maid.trigger_animation(FightingAnimation.FIST)
-        #     # maid.collision_with_char(another_maid)
-        # if key_pressed[pygame.K_h]:
-        #     maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        # if key_pressed[pygame.K_w]:
-        #     self.is_jump = True
-        #
-        # if self.is_jump:
-        #     self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
-        #
-        # # if key_pressed[pygame.K_LEFT]:
-        # #     another_maid.trigger_animation(MovingAnimation.WALK)
-        # #     another_maid.change_direction(False)
-        # # elif key_pressed[pygame.K_RIGHT]:
-        # #     another_maid.trigger_animation(MovingAnimation.WALK)
-        # #     another_maid.change_direction(True)
-        # # elif key_pressed[pygame.K_DOWN]:
-        # #     another_maid.trigger_animation(FightingAnimation.DEFENSE)
-        # # elif key_pressed[pygame.K_k]:
-        # #     another_maid.trigger_animation(FightingAnimation.FIST)
-        # #     another_maid.collision_with_char(maid)
-        # # elif key_pressed[pygame.K_l]:
-        # #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        # # elif key_pressed[pygame.K_UP]:
-        # #     another_maid.trigger_animation(MovingAnimation.JUMP)
-        # sprites.update()
-        # sprites.draw(screen)
-        #
-        # life_bar.draw(screen)
-        #
-        # self.assets['player_1'] = maid
-        # self.assets['player_1_life'] = life_bar
+        screen.blit(self.assets['background'], (0, 0))
+        player_1 = self.assets['player_1']
+        player_2 = self.assets['player_2']
+
+        sprites = self.assets['sprites']
+
+        life_bar = self.assets['player_1_life']
+        
+        life_bar_2 = self.assets['player_2_life']
+
+        key_pressed = pygame.key.get_pressed()
+
+        if key_pressed[pygame.K_a]:
+            player_1.trigger_animation(MovingAnimation.WALK)
+            player_1.change_direction(False)
+        if key_pressed[pygame.K_d]:
+            player_1.trigger_animation(MovingAnimation.WALK)
+            player_1.change_direction(True)
+        if key_pressed[pygame.K_s]:
+            player_1.trigger_animation(FightingAnimation.DEFENSE)
+        if key_pressed[pygame.K_g]:
+            player_1.trigger_animation(FightingAnimation.FIST)
+            player_1.collision_with_char(player_2)
+        if key_pressed[pygame.K_h]:
+            player_1.trigger_animation(FightingAnimation.LARGE_ATTACK)
+            player_1.collision_with_char(player_2)
+        if key_pressed[pygame.K_w]:
+            self.is_jump = True
+
+        if self.is_jump:
+            self.is_jump = player_1.trigger_animation(MovingAnimation.JUMP)
+
+        if key_pressed[pygame.K_LEFT]:
+            player_2.trigger_animation(MovingAnimation.WALK)
+            player_2.change_direction(False)
+        elif key_pressed[pygame.K_RIGHT]:
+            player_2.trigger_animation(MovingAnimation.WALK)
+            player_2.change_direction(True)
+        elif key_pressed[pygame.K_DOWN]:
+            player_2.trigger_animation(FightingAnimation.DEFENSE)
+        elif key_pressed[pygame.K_k]:
+            player_2.trigger_animation(FightingAnimation.FIST)
+            player_2.collision_with_char(player_1)
+        elif key_pressed[pygame.K_l]:
+            player_2.trigger_animation(FightingAnimation.LARGE_ATTACK)
+            player_2.collision_with_char(player_1)
+        elif key_pressed[pygame.K_UP]:
+            player_2.trigger_animation(MovingAnimation.JUMP)
+        sprites.update()
+        sprites.draw(screen)
+
+        life_bar.draw(screen)
+        
+        life_bar_2.draw(screen)
+        self.assets['player_1'] = player_1
+        self.assets['player_1_life'] = life_bar
 
     def _load_characters(self):
         if self.assets['player_1'] is None and self.assets['player_2'] is None:
             use_player = UsePlayer()
 
-            print(use_player.player2, use_player.player1)
+            player_1 = CharacterFactory.get_character(use_player.player1.player)
+            player_2 = CharacterFactory.get_character(use_player.player2.player)
+
+            player_1.set_x_y((10, HelpersFacade.screen.GROUND_AREA_Y))
+            player_2.set_x_y((HelpersFacade.screen.SCREEN_WIDTH - 10, HelpersFacade.screen.GROUND_AREA_Y))
+
+            self.assets['player_1'] = player_1
+            self.assets['player_2'] = player_2
+
+            self.assets['player_1_life'] = LifeBar(player_1)
+            self.assets['player_2_life'] = LifeBar(player_2, index=2)
+
+            self.assets['sprites'].add(player_1)
+            self.assets['sprites'].add(player_2)
 
 
 class ScreenManagerFactory:

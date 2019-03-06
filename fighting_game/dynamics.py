@@ -211,16 +211,15 @@ class ScreenSwitcher:
         return cls.__instance
 
 
-
 class Player:
 
     def __init__(self):
         self.player = None
 
-    def setPlayer(self, player):
+    def set_player(self, player):
         self.player = player
 
-    def getPlayer(self):
+    def get_player(self):
         print(self.player)
         return self.player
 
@@ -234,12 +233,11 @@ class UsePlayer:
             self.player1 = None
             self.player2 = None
 
-        def setPlayer1(self, player1):
+        def set_player_1(self, player1):
             self.player1 = player1
 
-        def setPlayer2(self, player2):
+        def set_player_2(self, player2):
             self.player2 = player2
-
     instance = None
 
     def __new__(self):
@@ -248,8 +246,8 @@ class UsePlayer:
             UsePlayer.instance = UsePlayer.__UsePlayer()
         return UsePlayer.instance
 
-    def setPlayer1(self,player1):
+    def set_player_1(self, player1):
         self.instance.player1 = player1
 
-    def setPlayer2(self,player2):
+    def set_player_2(self, player2):
         self.instance.player2 = player2
