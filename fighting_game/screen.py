@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import random
 from abc import ABC, abstractmethod
 
@@ -6,12 +5,9 @@ from fighting_game.accessories import *
 from fighting_game.character_builder import CharacterDirector, CharacterBuilder
 from fighting_game.helpers import HelpersFacade
 from fighting_game.helpers.colors import RED, BRIGHT_RED
-=======
 from abc import ABC
-
 from fighting_game.accessories import AccessoryFlyweight
 from fighting_game.character_factory import CharacterFactory
->>>>>>> 6c44b7112ca2701bcc8c8c7abd2dc617e7464c02
 from fighting_game.characters import *
 from fighting_game.dynamics import Player, UsePlayer
 from fighting_game.dynamics import ScreenSwitcher, LifeBar
@@ -259,7 +255,8 @@ class CharacterSelectionScreen(Screen):
 
 
 class FightingScreen(Screen):
-    is_jump = False
+    is_jump_player_1 = False
+    is_jump_player_2 = False
 
     def _load_assets(self):
         background = Image.load(Path.path_to("backgrounds", "BackgroundFairyTail.png"))
@@ -330,30 +327,12 @@ class FightingScreen(Screen):
             player_1.trigger_animation(FightingAnimation.LARGE_ATTACK)
             player_1.collision_with_char(player_2)
         if key_pressed[pygame.K_w]:
-            self.is_jump = True
+            self.is_jump_player_1 = True
 
-        if self.is_jump:
-<<<<<<< HEAD
-            self.is_jump = maid.trigger_animation(MovingAnimation.JUMP)
+        if self.is_jump_player_1:
+            self.is_jump_player_1 = player_1.trigger_animation(MovingAnimation.JUMP)
 
-        # if key_pressed[pygame.K_LEFT]:
-        #     another_maid.trigger_animation(MovingAnimation.WALK)
-        #     another_maid.change_direction(False)
-        # elif key_pressed[pygame.K_RIGHT]:
-        #     another_maid.trigger_animation(MovingAnimation.WALK)
-        #     another_maid.change_direction(True)
-        # elif key_pressed[pygame.K_DOWN]:
-        #     another_maid.trigger_animation(FightingAnimation.DEFENSE)
-        # elif key_pressed[pygame.K_k]:
-        #     another_maid.trigger_animation(FightingAnimation.FIST)
-        #     another_maid.collision_with_char(maid)
-        # elif key_pressed[pygame.K_l]:
-        #     another_maid.trigger_animation(FightingAnimation.LARGE_ATTACK)
-        # elif key_pressed[pygame.K_UP]:
-        #     another_maid.trigger_animation(MovingAnimation.JUMP)
-        # self.assets['accessory_group'].update()
         self.assets['accessory_group'].draw(screen)
-            self.is_jump = player_1.trigger_animation(MovingAnimation.JUMP)
 
         if key_pressed[pygame.K_LEFT]:
             player_2.trigger_animation(MovingAnimation.WALK)
@@ -370,7 +349,10 @@ class FightingScreen(Screen):
             player_2.trigger_animation(FightingAnimation.LARGE_ATTACK)
             player_2.collision_with_char(player_1)
         elif key_pressed[pygame.K_UP]:
-            player_2.trigger_animation(MovingAnimation.JUMP)
+            self.is_jump_player_2 = True
+
+        if self.is_jump_player_2:
+            self.is_jump_player_2 = player_2.trigger_animation(MovingAnimation.JUMP)
         sprites.update()
         sprites.draw(screen)
 
